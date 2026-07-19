@@ -1,0 +1,95 @@
+# ═══════════════════════════════════════════════
+# MB — productos.csv
+# Catálogo de productos
+#
+# CÓMO AGREGAR UN PRODUCTO:
+#   1. Copiá la foto en la carpeta images/ (ej: queso-cremoso.jpg)
+#   2. Agregá una fila nueva abajo con los datos del producto
+#   3. Subí los archivos a Netlify
+#
+# COLUMNAS:
+#   id         → número único, entero, mayor a 0
+#   nombre     → nombre completo del producto
+#   marca      → nombre de la marca
+#   categoria  → quesos | fiambres | lacteos | conservas | aderezos | especias | bebidas | otros
+#   peso       → presentación o unidad (texto libre)
+#   imagen     → solo el nombre del archivo (sin "images/") — vacío si no hay foto
+#   oferta     → true o false
+#   nuevo      → true o false
+#   masVendido → true o false
+#   aPedido    → true o false
+# ═══════════════════════════════════════════════
+
+id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
+
+# ── QUESOS ───────────────────────────────────────────────────────────────────
+1,Queso Cremoso,La Paulina,quesos,Horma aprox. 4 kg,queso-cremoso-la-paulina.jpg,false,false,true,false
+2,Queso Tybo,La Paulina,quesos,Horma aprox. 3 kg,queso-tybo-la-paulina.jpg,false,false,true,false
+3,Queso Pategrás,La Paulina,quesos,Horma aprox. 4 kg,queso-pategras-la-paulina.jpg,false,false,false,false
+4,Queso Fontina,La Paulina,quesos,Horma aprox. 3.5 kg,queso-fontina-la-paulina.jpg,false,false,false,false
+5,Queso Gouda,La Paulina,quesos,Horma aprox. 3.5 kg,queso-gouda-la-paulina.jpg,false,false,false,false
+6,Queso de Crema,La Paulina,quesos,Pouch 4 kg,queso-crema-la-paulina.jpg,false,false,false,false
+7,Queso Tybo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-tybo-lacteos-union.jpg,false,false,false,false
+8,Queso Pategrás,Lácteos Unión,quesos,Horma aprox. 4 kg,queso-pategras-lacteos-union.jpg,false,false,false,false
+9,Queso Sardo,Lácteos Unión,quesos,Horma aprox. 2.5 kg,queso-sardo-lacteos-union.jpg,false,false,false,false
+10,Queso Romano,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-romano-lacteos-union.jpg,false,true,false,false
+11,Queso Cheddar,Spalen,quesos,Pack x3,queso-cheddar-spalen.jpg,false,false,false,false
+12,Queso Muzzarella,Lácteos Unión,quesos,Barra aprox. 4 kg,queso-muzzarella-lacteos-union.jpg,false,false,true,false
+13,Queso Azul,Sancarlina,quesos,Horma aprox. 3 kg,queso-azul-sancarlina.jpg,false,false,false,false
+
+# ── FIAMBRES ─────────────────────────────────────────────────────────────────
+16,Jamón Cocido,Tacural,fiambres,Horma aprox. 5 kg,jamon-cocido-tacural.jpg,false,false,true,false
+17,Jamón Cocido,El Colonial,fiambres,Horma aprox. 5 kg,jamon-cocido-el-colonial.jpg,false,false,false,false
+18,Panceta Ahumada,El Colonial,fiambres,Aprox. 1.5 kg,panceta-ahumada-el-colonial.jpg,false,false,false,true
+19,Ahumados,La Tirolesa,fiambres,Aprox. 1.5 kg,ahumado-la-tirolesa.jpg,false,false,false,false
+20,Salame Milán Picado Fino,La Tirolesa,fiambres,Unidad,salame-milan-fino-la-tirolesa.jpg,false,false,true,false
+21,Salame Tipo Crespón Picado Grueso,Nutral Pig,fiambres,Unidad,salame-crespon-nutral-pig.jpg,false,false,false,false
+22,Salamín Tipo Milán,Nutral Pig,fiambres,Unidad,salamin-tipo-milan-nutral-pig.jpg,false,false,false,false
+23,Cocidos,La Tirolesa,fiambres,Pack 2 unidades,cocidos-la-tirolesa.jpg,false,false,false,false
+24,Bondiola,Natural Pig,fiambres,Unidad,,false,false,false,false
+
+# ── LÁCTEOS ──────────────────────────────────────────────────────────────────
+25,Crema para Batir 36%,La Paulina,lacteos,Balde 5000 cc,crema-la-paulina.jpg,false,false,true,false
+26,Leche Entera,Tregar,lacteos,Caja 12u x 1 L,leche-entera-tregar.jpg,false,false,false,false
+27,Manteca Clásica,Cotampo,lacteos,Pan 2.5 kg,manteca-cotampo.jpg,false,false,false,false
+28,Leche de Almendra Sin Azúcar,La Serenísima,lacteos,1 L,leche-almendra-la-serenisima.jpg,false,true,false,false
+
+# ── CONSERVAS ────────────────────────────────────────────────────────────────
+29,Tomate Triturado,,conservas,Lata 8 kg,,false,false,true,false
+30,Champiñones,,conservas,Lata 800 g,,false,false,false,false
+31,Choclo,,conservas,Lata 800 g,,false,false,false,false
+32,Durazno en Mitades,Gentleman,conservas,Lata 820 g,durazno-en-mitades-gentleman.jpg,false,false,false,false
+33,Ananá en Rodajas,Gentleman,conservas,Lata 820 g,anana-en-rodajas-gentleman.jpg,false,false,false,false
+34,Cóctel de Cuatro Frutas,Gentleman,conservas,Lata 820 g,coctel-de-frutas-gentleman.jpg,false,false,false,false
+35,Palmitos en Rodajas,Finca de Santiago,conservas,Lata 800 g,palmitos-en-rodajas-finca-de-santiago.jpg,false,true,false,false
+36,Pimientos Morrón Enteros,Finca de Santiago,conservas,Lata 750 g,morron-entero-finca-de-santiago.jpg,false,true,false,false
+37,Tomate Perita,Finca de Santiago,conservas,Lata 800 g,tomate-perita-finca-de-santiago.jpg,false,false,false,false
+38,Aceitunas Verdes Enteras,,conservas,Balde 5 kg,aceitunas-verdes-enteras.jpg,false,false,false,false
+39,Aceitunas Negras Fileteadas,,conservas,Balde 5 kg,aceitunas-negras-fileteadas.jpg,false,false,false,false
+40,Aceitunas Verdes Fileteadas,,conservas,Balde 5 kg,aceitunas-verdes-fileteadas.jpg,false,false,false,false
+
+# ── ADEREZOS ─────────────────────────────────────────────────────────────────
+41,Ketchup,Dánica,aderezos,3 kg,ketchup-danica.jpg,false,false,true,false
+42,Mayonesa,Dánica,aderezos,3 kg,mayonesa-danica.jpg,false,false,true,false
+43,Salsa Golf,Dánica,aderezos,3 kg,salsa-golf-danica.jpg,false,false,false,false
+44,Mostaza,Dánica,aderezos,3 kg,mostaza-danica.jpg,false,false,false,false
+45,Mostaza Individual,Dánica,aderezos,Caja,mostaza-individual-danica.jpg,false,false,false,false
+
+# ── ESPECIAS ─────────────────────────────────────────────────────────────────
+46,Tomillo,Especias Vélez,especias,1000 g,tomillo-velez.jpg,false,false,false,false
+47,Soja Texturizada,Especias Dean Funes,especias,1000 g,soja-texturizada-dean-funes.jpg,false,true,false,false
+
+# ── BEBIDAS ──────────────────────────────────────────────────────────────────
+48,Jugo de Naranja,Citric,bebidas,Bidón 5 L,jugo-naranja-citric.jpg,false,false,false,false
+49,Jugo de Limón,My Jugo,bebidas,Bidón 5 L,jugo-limon-my-jugo.jpg,false,false,false,false
+50,Vinagre de Manzana,San Bernandino,bebidas,Bidón 5 L,vinagre-manzana-san-bernandino.jpg,false,false,false,false
+51,Vinagre de Vino,San Bernandino,bebidas,Bidón 5 L,vinagre-vino-san-bernandino.jpg,false,false,false,false
+
+# ── OTROS ────────────────────────────────────────────────────────────────────
+52,Sal Hierbas,Don Burro,otros,300 g aprox.,sal-hierbas-don-burro.jpg,false,false,false,false
+53,Sal Picante,Don Burro,otros,300 g aprox.,sal-picante-don-burro.jpg,false,false,false,false
+54,Sal Fina,Celusal,otros,500 g,sal-fina-celusal.jpg,false,false,false,false
+55,Azúcar Clásica,Ledesma,otros,Pack 10u x 1 kg,azucar-clasica-ledesma.jpg,false,true,false,false
+56,Pan Rallado,,otros,Bolsa 5 kg,,false,false,true,false
+57,Pionono,,otros,Unidad,,false,false,false,false
+58,Aceite,,otros,Bidón 10 L retornable,,false,false,true,false
