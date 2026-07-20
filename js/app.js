@@ -41,7 +41,7 @@ function initDOM() {
   DOM.cartTotal   = document.getElementById('cartTotalItems');
   DOM.cartNombre  = document.getElementById('cartNombre');
   DOM.cartNegocio = document.getElementById('cartNegocio');
-  DOM.cartLocalidad = document.getElementById('cartLocalidad');
+  DOM.cartDireccion = document.getElementById('cartDireccion');
   DOM.cartObs     = document.getElementById('cartObs');
   DOM.cartFab     = document.querySelector('.cart-fab');
 }
@@ -416,7 +416,7 @@ function enviarPedido() {
 
   const nombre    = DOM.cartNombre?.value.trim()    || '';
   const negocio   = DOM.cartNegocio?.value.trim()   || '';
-  const localidad = DOM.cartLocalidad?.value.trim() || '';
+  const direccion = DOM.cartDireccion?.value.trim() || '';
   const obs       = DOM.cartObs?.value.trim()       || '';
 
   if (!nombre) { DOM.cartNombre?.focus(); return; }
@@ -437,7 +437,7 @@ function enviarPedido() {
     `Cliente: ${nombre}`,
   ];
   if (negocio)   partes.push(`Empresa: ${negocio}`);
-  if (localidad) partes.push(`Localidad: ${localidad}`);
+  if (direccion) partes.push(`Dirección de entrega: ${direccion}`);
   if (obs)       partes.push(`Observaciones: ${obs}`);
 
   const msg = partes.join('\n');
