@@ -24,18 +24,20 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 
 # ── QUESOS ───────────────────────────────────────────────────────────────────
 1,Queso Cremoso,La Paulina,quesos,Horma aprox. 4 kg,queso-cremoso-la-paulina.jpg,false,false,true,false
-2,Queso Tybo,La Paulina,quesos,Horma aprox. 3 kg,queso-tybo-la-paulina.jpg,false,false,true,false
 3,Queso Pategrás,La Paulina,quesos,Horma aprox. 4 kg,queso-pategras-la-paulina.jpg,false,false,false,false
 4,Queso Fontina,La Paulina,quesos,Horma aprox. 3.5 kg,queso-fontina-la-paulina.jpg,false,false,false,false
 5,Queso Gouda,La Paulina,quesos,Horma aprox. 3.5 kg,queso-gouda-la-paulina.jpg,false,false,false,false
 6,Queso de Crema,La Paulina,quesos,Pouch 4 kg,queso-crema-la-paulina.jpg,false,false,false,false
 7,Queso Tybo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-tybo-lacteos-union.jpg,false,false,false,false
 8,Queso Pategrás,Lácteos Unión,quesos,Horma aprox. 4 kg,queso-pategras-lacteos-union.jpg,false,false,false,false
-9,Queso Sardo,Lácteos Unión,quesos,Horma aprox. 2.5 kg,queso-sardo-lacteos-union.jpg,false,false,false,false
+9,Queso Sardo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-sardo-lacteos-union.jpg,false,false,false,false
 10,Queso Romano,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-romano-lacteos-union.jpg,false,true,false,false
 11,Queso Cheddar,Spalen,quesos,Pack x3,queso-cheddar-spalen.jpg,false,false,false,false
 12,Queso Muzzarella,Lácteos Unión,quesos,Barra aprox. 4 kg,queso-muzzarella-lacteos-union.jpg,false,false,true,false
 13,Queso Azul,Sancarlina,quesos,Horma aprox. 3 kg,queso-azul-sancarlina.jpg,false,false,false,false
+59,Queso Sardo,Oro,quesos,Horma aprox. 3 kg,queso-sardo-oro.jpg,false,false,false,false
+60,Queso Tybo Senda,La Paulina,quesos,Horma aprox. 4 kg,tybo-senda-la-paulina.jpg,false,false,false,false
+61,Queso Cheddar Pouch,La Paulina,quesos,Pouch 4 kg,cheddar-pouch-la-paulina.jpg,false,false,false,false
 
 # ── FIAMBRES ─────────────────────────────────────────────────────────────────
 16,Jamón Cocido,Tacural,fiambres,Horma aprox. 5 kg,jamon-cocido-tacural.jpg,false,false,true,false
@@ -45,28 +47,30 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 20,Salame Milán Picado Fino,La Tirolesa,fiambres,Unidad,salame-milan-fino-la-tirolesa.jpg,false,false,true,false
 21,Salame Tipo Crespón Picado Grueso,Nutral Pig,fiambres,Unidad,salame-crespon-nutral-pig.jpg,false,false,false,false
 22,Salamín Tipo Milán,Nutral Pig,fiambres,Unidad,salamin-tipo-milan-nutral-pig.jpg,false,false,false,false
-23,Cocidos,La Tirolesa,fiambres,Pack 2 unidades,cocidos-la-tirolesa.jpg,false,false,false,false
-24,Bondiola,Natural Pig,fiambres,Unidad,,false,false,false,false
+24,Bondiola,Natural Pig,fiambres,Unidad,bondiola-natural-pig.jpg,false,false,false,false
+62,Jamón Crudo,Tacural,fiambres,Aprox. 3 kg,jamon-crudo-tacural.jpg,false,false,false,false
+63,Jamón Cocido,La Tirolesa,fiambres,Aprox. 5.6 kg,jamon-cocido-la-tirolesa.jpg,false,false,false,false
+64,Jamonada,La Tirolesa,fiambres,Aprox. 5.6 kg,jamonada-la-tirolesa.jpg,false,false,false,false
 
 # ── LÁCTEOS ──────────────────────────────────────────────────────────────────
 25,Crema para Batir 36%,La Paulina,lacteos,Balde 5000 cc,crema-la-paulina.jpg,false,false,true,false
 26,Leche Entera,Tregar,lacteos,Caja 12u x 1 L,leche-entera-tregar.jpg,false,false,false,false
 27,Manteca Clásica,Cotampo,lacteos,Pan 2.5 kg,manteca-cotampo.jpg,false,false,false,false
-28,Leche de Almendra Sin Azúcar,La Serenísima,lacteos,1 L,leche-almendra-la-serenisima.jpg,false,true,false,false
+65,Crema Doble,La Paulina,lacteos,Balde 5 kg,crema-doble-la-paulina.jpg,false,false,false,false
 
 # ── CONSERVAS ────────────────────────────────────────────────────────────────
-29,Tomate Triturado,,conservas,Lata 8 kg,,false,false,true,false
-30,Champiñones,,conservas,Lata 800 g,,false,false,false,false
-31,Choclo,,conservas,Lata 800 g,,false,false,false,false
+29,Tomate Triturado,Finca de Santiago,conservas,Pouch - Caja 4 unidades x 2 kg c/u,tomate-triturado-pouch-finca-de-santiago.jpg,false,false,true,false
+31,Choclo en Grano,Finca de Santiago,conservas,Lata 800 g,choclo-en-grano-finca-de-santiago.jpg,false,false,false,false
 32,Durazno en Mitades,Gentleman,conservas,Lata 820 g,durazno-en-mitades-gentleman.jpg,false,false,false,false
 33,Ananá en Rodajas,Gentleman,conservas,Lata 820 g,anana-en-rodajas-gentleman.jpg,false,false,false,false
 34,Cóctel de Cuatro Frutas,Gentleman,conservas,Lata 820 g,coctel-de-frutas-gentleman.jpg,false,false,false,false
 35,Palmitos en Rodajas,Finca de Santiago,conservas,Lata 800 g,palmitos-en-rodajas-finca-de-santiago.jpg,false,true,false,false
 36,Pimientos Morrón Enteros,Finca de Santiago,conservas,Lata 750 g,morron-entero-finca-de-santiago.jpg,false,true,false,false
-37,Tomate Perita,Finca de Santiago,conservas,Lata 800 g,tomate-perita-finca-de-santiago.jpg,false,false,false,false
-38,Aceitunas Verdes Enteras,,conservas,Balde 5 kg,aceitunas-verdes-enteras.jpg,false,false,false,false
+72,Puré de Tomate,Finca de Santiago,conservas,Caja 16 unidades x 520 g c/u,pure-de-tomate-finca-de-santiago.jpg,false,false,false,false
+38,Aceitunas Verdes Enteras,Arauco,conservas,Balde 5 kg,aceitunas-verdes-enteras.jpg,false,false,false,false
 39,Aceitunas Negras Fileteadas,,conservas,Balde 5 kg,aceitunas-negras-fileteadas.jpg,false,false,false,false
 40,Aceitunas Verdes Fileteadas,,conservas,Balde 5 kg,aceitunas-verdes-fileteadas.jpg,false,false,false,false
+66,Aceitunas Negras Enteras,Arauco,conservas,Balde 5 kg,aceitunas-negras-enteras-arauco.jpg,false,false,false,false
 
 # ── ADEREZOS ─────────────────────────────────────────────────────────────────
 41,Ketchup,Dánica,aderezos,3 kg,ketchup-danica.jpg,false,false,true,false
@@ -74,6 +78,9 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 43,Salsa Golf,Dánica,aderezos,3 kg,salsa-golf-danica.jpg,false,false,false,false
 44,Mostaza,Dánica,aderezos,3 kg,mostaza-danica.jpg,false,false,false,false
 45,Mostaza Individual,Dánica,aderezos,Caja,mostaza-individual-danica.jpg,false,false,false,false
+67,Ketchup Individual,Dánica,aderezos,Caja 192 unidades x 8 g c/u,ketchup-individual-danica.jpg,false,false,false,false
+68,Mayonesa Individual,Dánica,aderezos,Caja 192 unidades x 8 g c/u,mayonesa-individual-danica.jpg,false,false,false,false
+69,Mayodán,Dánica,aderezos,3 kg,mayodan-danica.jpg,false,false,false,false
 
 # ── ESPECIAS ─────────────────────────────────────────────────────────────────
 46,Tomillo,Especias Vélez,especias,1000 g,tomillo-velez.jpg,false,false,false,false
@@ -90,6 +97,8 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 53,Sal Picante,Don Burro,otros,300 g aprox.,sal-picante-don-burro.jpg,false,false,false,false
 54,Sal Fina,Celusal,otros,500 g,sal-fina-celusal.jpg,false,false,false,false
 55,Azúcar Clásica,Ledesma,otros,Pack 10u x 1 kg,azucar-clasica-ledesma.jpg,false,true,false,false
-56,Pan Rallado,,otros,Bolsa 5 kg,,false,false,true,false
-57,Pionono,,otros,Unidad,,false,false,false,false
-58,Aceite,,otros,Bidón 10 L retornable,,false,false,true,false
+56,Pan Rallado,,otros,Bolsa 5 kg,pan-rallado.jpg,false,false,true,false
+57,Pionono,,otros,Unidad,pionono.jpg,false,false,false,false
+58,Aceite,,otros,Bidón 10 L retornable,aceite-10l.jpg,false,false,true,false
+70,Aceite de Oliva,Ebenezer,otros,2 L,aceite-oliva-ebenezer.jpg,false,false,false,false
+71,Pulpa de Frutilla,Emalubi,otros,1 kg,pulpa-de-frutilla-emalubi.jpg,false,false,false,false

@@ -199,9 +199,6 @@ function renderCatalogo() {
    TARJETA DE PRODUCTO
 ───────────────────────────────────────────── */
 function crearTarjeta(p) {
-  const catLabel  = CATEGORIAS[p.categoria]?.label || p.categoria;
-  const badges    = BADGES.filter(b => p[b.key])
-    .map(b => `<span class="ptag ${b.css}">${b.label}</span>`).join('');
   const enCarrito = !!carrito[p.id];
 
   // Imagen: si tiene → img con fallback placeholder; si no → placeholder directo
@@ -220,8 +217,6 @@ function crearTarjeta(p) {
 
   div.innerHTML = `
     <div class="pcard-img-wrap">
-      <div class="pcard-cat-badge">${catLabel}</div>
-      ${badges ? `<div class="pcard-tags">${badges}</div>` : ''}
       ${imgHtml}
     </div>
     <div class="pcard-body">
@@ -246,11 +241,53 @@ function crearTarjeta(p) {
 ───────────────────────────────────────────── */
 function initGridDelegation() {
   DOM.grid?.addEventListener('click', e => {
+    const img = e.target.closest('.pcard-img-wrap img');
+    if (img) { abrirLightbox(img.src, img.alt); return; }
+
     const btn = e.target.closest('[data-action]');
     if (!btn) return;
     const id = parseInt(btn.dataset.id, 10);
     if (btn.dataset.action === 'agregar')   agregarAlCarrito(id);
     if (btn.dataset.action === 'consultar') consultarProducto(id);
+  });
+}
+
+/* ─────────────────────────────────────────────
+   LIGHTBOX — ampliar imagen de producto
+───────────────────────────────────────────── */
+function abrirLightbox(src, alt) {
+  const overlay = document.getElementById('imgLightbox');
+  const img     = document.getElementById('imgLightboxImg');
+  if (!overlay || !img) return;
+  img.src = src;
+  img.alt = alt || '';
+  overlay.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarLightbox() {
+  const overlay = document.getElementById('imgLightbox');
+  const img     = document.getElementById('imgLightboxImg');
+  if (!overlay) return;
+  overlay.classList.remove('is-open');
+  document.body.style.overflow = '';
+  if (img) img.src = '';
+}
+
+function initLightbox() {
+  const overlay = document.getElementById('imgLightbox');
+  const closeBtn = document.getElementById('imgLightboxClose');
+  if (!overlay) return;
+
+  // Clic fuera de la imagen (en el fondo oscuro) cierra
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) cerrarLightbox();
+  });
+  closeBtn?.addEventListener('click', cerrarLightbox);
+
+  // Tecla Esc cierra
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) cerrarLightbox();
   });
 }
 
@@ -522,6 +559,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   construirFiltros();
   initGridDelegation();
   initCartDelegation();
+  initLightbox();
   DOM.search?.addEventListener('input', onBusqueda);
 
   // Cargar carrito guardado de la sesión
