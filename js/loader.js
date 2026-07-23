@@ -67,7 +67,7 @@ function parsearCSV(texto) {
 function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
   const [id, nombre, marca, categoria, peso, imagen,
          oferta, nuevo, masVendido, aPedido,
-         imagen2, imagen3, imagen4, precio, imagen5, carpeta,
+         imagen2, imagen3, imagen4, precioOferta, imagen5, carpeta,
          descripcion, variantes] = raw;
 
   // ── Campos obligatorios ──
@@ -182,7 +182,7 @@ function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
     imagen:      imgNombre ? IMAGEN_PREFIX + imgNombre : '',
     imagenes:    imagenes,               // array con todas las fotos válidas (columnas imagen..imagen5)
     carpeta:     (carpeta || '').trim(), // (OPCIONAL) si está cargada, se prueban fotos numeradas 1,2,3... en images/<carpeta>/
-    precio:      (precio || '').trim(),  // solo se usa/muestra si oferta=true
+    precioOferta: (precioOferta || '').trim(),  // solo se usa/muestra si oferta=true
     descripcion: (descripcion || '').trim(), // (OPCIONAL) texto libre debajo de la presentación
     variantes:   (variantes || '').trim()
                    ? variantes.split('|').map(v => v.trim()).filter(Boolean)

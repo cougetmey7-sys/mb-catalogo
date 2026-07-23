@@ -165,7 +165,7 @@ function filtrarProductos() {
 ───────────────────────────────────────────── */
 function renderOfertasDestacadas() {
   if (!DOM.ofertasDestGrid || !DOM.ofertasDestSection) return;
-  const destacadas = productos.filter(p => p.oferta && p.precio);
+  const destacadas = productos.filter(p => p.oferta && p.precioOferta);
   const btnVerOfertas = document.getElementById('verOfertasBtn');
 
   if (!destacadas.length) {
@@ -182,6 +182,14 @@ function renderOfertasDestacadas() {
   });
   DOM.ofertasDestGrid.innerHTML = '';
   DOM.ofertasDestGrid.appendChild(frag);
+
+  // BUGFIX: sin esto, las tarjetas de Ofertas quedaban con opacity:0 para
+  // siempre — la animación "fade-up" solo se activa cuando el elemento es
+  // observado por fadeObserver, y esta sección no lo estaba haciendo
+  // (a diferencia de renderCatalogo(), que sí registra sus tarjetas nuevas).
+  requestAnimationFrame(() => {
+    DOM.ofertasDestGrid.querySelectorAll('.fade-up:not(.visible)').forEach(el => fadeObserver.observe(el));
+  });
 }
 
 function initOfertasDestacadasCarrusel() {
@@ -318,10 +326,10 @@ function crearTarjeta(p, opciones = {}) {
 
   // El precio SOLO se muestra en la sección de Ofertas Destacadas,
   // nunca en la grilla normal del catálogo (aunque el producto tenga oferta=true).
-  const esOfertaConPrecio = destacado && p.oferta && p.precio;
+  const esOfertaConPrecio = destacado && p.oferta && p.precioOferta;
   const ribbonOferta = esOfertaConPrecio ? `<div class="pcard-ribbon-oferta">OFERTA</div>` : '';
   const precioHtml = esOfertaConPrecio
-    ? `<div class="pcard-precio">${/^[\d.,]+$/.test(p.precio) ? '$' + p.precio : p.precio}</div>`
+    ? `<div class="pcard-precio">${/^[\d.,]+$/.test(p.precioOferta) ? '$' + p.precioOferta : p.precioOferta}</div>`
     : '';
   const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? 'Agregar al pedido' : '+ Agregar');
   const descripcionHtml = p.descripcion ? `<div class="pcard-desc">${p.descripcion}</div>` : '';
