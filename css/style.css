@@ -1654,10 +1654,13 @@ footer {
 ───────────────────────────────────────────── */
 .pcard-precio {
   font-family: var(--ff-display);
-  font-size: 22px;
-  color: #ff6b00;
-  letter-spacing: .5px;
-  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff8c1a;
+  letter-spacing: .3px;
+  margin-top: 2px;
+  line-height: 1.15;
+  text-shadow: 0 0 18px rgba(255,140,0,.25);
 }
 .pcard-oferta { border-color: #ff6b00; }
 .pcard-oferta .pcard-btn-add { background: #ff6b00; }
@@ -1778,14 +1781,15 @@ footer {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 56px;
 }
 .ofertas-dest-grid {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  scroll-padding: 0;
   padding-bottom: 6px;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -1793,7 +1797,7 @@ footer {
 .ofertas-dest-grid::-webkit-scrollbar { display: none; }
 .ofertas-dest-grid .pcard {
   flex: 0 0 auto;
-  width: 240px;
+  width: 200px;
   scroll-snap-align: start;
 }
 /* Tarjetas destacadas: mismo componente .pcard, con un poco más de énfasis */
@@ -1822,8 +1826,8 @@ footer {
   transition: background var(--transition);
 }
 .ofertas-dest-arrow:hover { background: rgba(255,107,0,.35); }
-.ofertas-dest-arrow-prev { left: -4px; }
-.ofertas-dest-arrow-next { right: -4px; }
+.ofertas-dest-arrow-prev { left: 6px; }
+.ofertas-dest-arrow-next { right: 6px; }
 
 .pcard-ribbon-oferta {
   position: absolute;
@@ -1840,11 +1844,31 @@ footer {
   border-radius: 3px;
 }
 
+/* Etiqueta chica sobre el precio ("🔥 Precio Oferta") */
+.pcard-precio-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: #ff9a4d;
+  margin-top: 8px;
+}
+
+@media (max-width: 992px) {
+  .ofertas-dest-carousel-wrap { padding: 0 44px; }
+  .ofertas-dest-grid .pcard { width: 190px; }
+}
+
 @media (max-width: 768px) {
   .section-ofertas-destacadas { padding: 36px 0 44px; }
   .ofertas-dest-arrow { display: none; } /* en mobile se usa el deslizado táctil */
   .ofertas-dest-carousel-wrap { padding: 0 16px; }
-  .ofertas-dest-grid .pcard { width: 200px; }
+  .ofertas-dest-grid .pcard { width: 190px; }
+}
+
+@media (max-width: 480px) {
+  .ofertas-dest-carousel-wrap { padding: 0 16px; }
+  .ofertas-dest-grid .pcard { width: calc(100vw - 64px); }
 }
 
 /* ─────────────────────────────────────────────

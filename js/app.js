@@ -198,7 +198,7 @@ function initOfertasDestacadasCarrusel() {
   const scrollPor = dir => {
     if (!DOM.ofertasDestGrid) return;
     const tarjeta = DOM.ofertasDestGrid.querySelector('.pcard');
-    const ancho = tarjeta ? tarjeta.offsetWidth + 18 : 260; // 18px = gap
+    const ancho = tarjeta ? tarjeta.offsetWidth + 16 : 216; // 16px = gap
     DOM.ofertasDestGrid.scrollBy({ left: dir * ancho * 2, behavior: 'smooth' });
   };
   prev?.addEventListener('click', () => scrollPor(-1));
@@ -329,9 +329,10 @@ function crearTarjeta(p, opciones = {}) {
   const esOfertaConPrecio = destacado && p.oferta && p.precioOferta;
   const ribbonOferta = esOfertaConPrecio ? `<div class="pcard-ribbon-oferta">OFERTA</div>` : '';
   const precioHtml = esOfertaConPrecio
-    ? `<div class="pcard-precio">${/^[\d.,]+$/.test(p.precioOferta) ? '$' + p.precioOferta : p.precioOferta}</div>`
+    ? `<div class="pcard-precio-tag">🔥 Precio Oferta</div>
+       <div class="pcard-precio">${/^[\d.,]+$/.test(p.precioOferta) ? '$' + p.precioOferta : p.precioOferta}</div>`
     : '';
-  const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? 'Agregar al pedido' : '+ Agregar');
+  const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? '🛒 Agregar al pedido' : '+ Agregar');
   const descripcionHtml = p.descripcion ? `<div class="pcard-desc">${p.descripcion}</div>` : '';
   const apedidoHtml = p.aPedido ? `<div class="pcard-badge-apedido">📦 Producto disponible por pedido</div>` : '';
   const variantesHtml = p.variantes.length ? `
@@ -615,7 +616,7 @@ function botonesAgregarDe(id) {
 }
 
 function textoBotonPara(btnEl) {
-  return btnEl.closest('.pcard')?.classList.contains('pcard-oferta') ? 'Agregar al pedido' : '+ Agregar';
+  return btnEl.closest('.pcard')?.classList.contains('pcard-oferta') ? '🛒 Agregar al pedido' : '+ Agregar';
 }
 
 function quitarDelCarrito(key) {
