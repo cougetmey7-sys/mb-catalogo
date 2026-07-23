@@ -247,6 +247,25 @@ ul { list-style:none; }
   border-color: var(--blanco);
   background: rgba(255,255,255,.04);
 }
+.btn-ofertas {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ff6b00;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  padding: 16px 32px;
+  border-radius: var(--radius);
+  transition: all var(--transition);
+  box-shadow: 0 4px 24px rgba(255,107,0,.3);
+}
+.btn-ofertas:hover {
+  background: #e05f00;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255,107,0,.4);
+}
 
 .hero-trust {
   display: flex;
@@ -1562,4 +1581,284 @@ footer {
 @media (max-width: 480px) {
   .img-lightbox { padding: 20px 12px; }
   .img-lightbox-close { top: 12px; right: 12px; width: 38px; height: 38px; }
+}
+
+/* ─────────────────────────────────────────────
+   CARRUSEL DE FOTOS EN TARJETA (2+ imágenes)
+───────────────────────────────────────────── */
+.pcard-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pcard-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.pcard-slide.is-active { opacity: 1; pointer-events: auto; }
+
+.pcard-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(20,20,20,.55);
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background var(--transition);
+}
+.pcard-arrow:hover { background: rgba(20,20,20,.8); }
+.pcard-arrow-prev { left: 8px; }
+.pcard-arrow-next { right: 8px; }
+
+.pcard-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  z-index: 2;
+}
+.pcard-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(20,20,20,.3);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.pcard-dot.is-active { background: rgba(20,20,20,.85); }
+
+/* ─────────────────────────────────────────────
+   TARJETA DE OFERTA (con precio destacado)
+───────────────────────────────────────────── */
+.pcard-precio {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  color: #ff6b00;
+  letter-spacing: .5px;
+  margin-top: 6px;
+}
+.pcard-oferta { border-color: #ff6b00; }
+.pcard-oferta .pcard-btn-add { background: #ff6b00; }
+.pcard-oferta .pcard-btn-add:hover:not(.added) { background: #e05f00; }
+
+/* ─────────────────────────────────────────────
+   NAVEGACIÓN DEL LIGHTBOX (múltiples fotos)
+───────────────────────────────────────────── */
+.img-lightbox-nav {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 1000;
+}
+.img-lightbox-arrow {
+  pointer-events: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.img-lightbox-arrow:hover { background: rgba(255,255,255,.2); }
+
+@media (max-width: 480px) {
+  .img-lightbox-nav { padding: 0 8px; }
+  .img-lightbox-arrow { width: 40px; height: 40px; font-size: 20px; }
+}
+
+/* ─────────────────────────────────────────────
+   DESCRIPCIÓN Y SELECTOR DE VARIANTE (sabor, etc.)
+───────────────────────────────────────────── */
+.pcard-desc {
+  font-size: 11.5px;
+  color: var(--gris-txt);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.pcard-variant {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--gris2);
+  border: 1px solid var(--gris3);
+  border-radius: var(--radius);
+  color: var(--blanco);
+  font-family: var(--ff-body);
+  font-size: 12.5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.pcard-variant:focus { border-color: var(--rojo); }
+
+/* ─────────────────────────────────────────────
+   OFERTAS DESTACADAS — banner comercial + carrusel horizontal
+───────────────────────────────────────────── */
+.section-ofertas-destacadas {
+  padding: 48px 0 56px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255,140,0,.20), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(255,70,0,.16), transparent 55%),
+    linear-gradient(180deg, #1a1004, var(--negro) 65%);
+  border-top: 1px solid rgba(255,140,0,.25);
+  border-bottom: 1px solid rgba(255,140,0,.25);
+  overflow: hidden;
+}
+.ofertas-dest-header {
+  max-width: 1200px;
+  margin: 0 auto 26px;
+  padding: 0 24px;
+  text-align: center;
+}
+.ofertas-dest-title {
+  font-family: var(--ff-display);
+  font-size: clamp(28px, 4.5vw, 42px);
+  letter-spacing: .5px;
+  color: var(--blanco);
+  text-shadow: 0 0 30px rgba(255,120,0,.35);
+  margin-bottom: 8px;
+}
+.ofertas-dest-sub {
+  font-size: 15px;
+  color: #ff9a4d;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ofertas-dest-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,107,0,.14);
+  border: 1px solid rgba(255,107,0,.5);
+  color: #ffb066;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+/* Carrusel horizontal */
+.ofertas-dest-carousel-wrap {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.ofertas-dest-grid {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 6px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.ofertas-dest-grid::-webkit-scrollbar { display: none; }
+.ofertas-dest-grid .pcard {
+  flex: 0 0 auto;
+  width: 240px;
+  scroll-snap-align: start;
+}
+/* Tarjetas destacadas: mismo componente .pcard, con un poco más de énfasis */
+.ofertas-dest-grid .pcard.pcard-oferta {
+  border-width: 2px;
+  box-shadow: 0 10px 28px rgba(255,107,0,.22);
+}
+
+.ofertas-dest-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(20,20,20,.85);
+  border: 1px solid rgba(255,140,0,.5);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background var(--transition);
+}
+.ofertas-dest-arrow:hover { background: rgba(255,107,0,.35); }
+.ofertas-dest-arrow-prev { left: -4px; }
+.ofertas-dest-arrow-next { right: -4px; }
+
+.pcard-ribbon-oferta {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: #ff6b00;
+  color: #fff;
+  font-family: var(--ff-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .section-ofertas-destacadas { padding: 36px 0 44px; }
+  .ofertas-dest-arrow { display: none; } /* en mobile se usa el deslizado táctil */
+  .ofertas-dest-carousel-wrap { padding: 0 16px; }
+  .ofertas-dest-grid .pcard { width: 200px; }
+}
+
+/* ─────────────────────────────────────────────
+   BADGE "PRODUCTO POR PEDIDO"
+───────────────────────────────────────────── */
+.pcard-badge-apedido {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #cfa15a;
+  background: rgba(207,161,90,.12);
+  border: 1px solid rgba(207,161,90,.35);
+  border-radius: 3px;
+  padding: 3px 8px;
+  margin-bottom: 6px;
+  letter-spacing: .3px;
 }

@@ -67,6 +67,9 @@
       <a href="#catalogo" class="btn-secondary">
         📦 Ver catálogo completo
       </a>
+      <a href="#ofertasDestacadasSection" class="btn-ofertas" id="verOfertasBtn" style="display:none">
+        🔥 Ver ofertas
+      </a>
     </div>
     <div class="hero-trust fade-up" style="transition-delay:.4s">
       <div class="hero-trust-item">Entregas rápidas</div>
@@ -80,7 +83,7 @@
 <div class="stats-strip">
   <div class="stats-grid">
     <div class="stat-item fade-up">
-      <div class="stat-num">+<span>65</span></div>
+      <div class="stat-num">+<span>67</span></div>
       <div class="stat-lbl">Productos disponibles</div>
     </div>
     <div class="stat-item fade-up" style="transition-delay:.1s">
@@ -97,6 +100,20 @@
     </div>
   </div>
 </div>
+
+<!-- ══════════════ OFERTAS DESTACADAS ══════════════ -->
+<section class="section-ofertas-destacadas" id="ofertasDestacadasSection" style="display:none">
+  <div class="ofertas-dest-header fade-up">
+    <h2 class="ofertas-dest-title">🔥 Ofertas de la semana</h2>
+    <p class="ofertas-dest-sub">Precios especiales por tiempo limitado</p>
+    <div class="ofertas-dest-stock">⏳ Hasta agotar stock</div>
+  </div>
+  <div class="ofertas-dest-carousel-wrap">
+    <button class="ofertas-dest-arrow ofertas-dest-arrow-prev" id="ofertasDestPrev" type="button" aria-label="Ver ofertas anteriores">‹</button>
+    <div class="ofertas-dest-grid" id="ofertasDestacadasGrid"></div>
+    <button class="ofertas-dest-arrow ofertas-dest-arrow-next" id="ofertasDestNext" type="button" aria-label="Ver más ofertas">›</button>
+  </div>
+</section>
 
 <!-- ══════════════ CLIENTES ══════════════ -->
 <section class="section-clientes" id="clientes">
@@ -218,7 +235,7 @@
     <div class="proceso-step fade-up"><div class="proceso-num">1</div><div class="proceso-titulo">Elegís los productos</div><div class="proceso-desc">Explorá el catálogo, buscá lo que necesitás o consultanos directamente.</div></div>
     <div class="proceso-step fade-up" style="transition-delay:.1s"><div class="proceso-num">2</div><div class="proceso-titulo">Enviás el pedido</div><div class="proceso-desc">Un solo mensaje de WhatsApp con todo lo que necesitás. Sin formularios complicados.</div></div>
     <div class="proceso-step fade-up" style="transition-delay:.2s"><div class="proceso-num">3</div><div class="proceso-titulo">Confirmamos</div><div class="proceso-desc">Te respondemos en menos de 24h con disponibilidad, precios y condiciones.</div></div>
-    <div class="proceso-step fade-up" style="transition-delay:.3s"><div class="proceso-num">4</div><div class="proceso-titulo">Coordina entrega</div><div class="proceso-desc">Coordinamos el envío según tus necesidades. Vos te dedicás a tu negocio.</div></div>
+    <div class="proceso-step fade-up" style="transition-delay:.3s"><div class="proceso-num">4</div><div class="proceso-titulo">Coordinamos la entrega</div><div class="proceso-desc">Coordinamos el envío según tus necesidades. Vos te dedicás a tu negocio.</div></div>
   </div>
 </section>
 
@@ -381,6 +398,10 @@
 <!-- Lightbox de imagen de producto -->
 <div class="img-lightbox" id="imgLightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada del producto">
   <button class="img-lightbox-close" id="imgLightboxClose" type="button" aria-label="Cerrar imagen ampliada">✕</button>
+  <div class="img-lightbox-nav" id="imgLightboxNav" style="display:none">
+    <button class="img-lightbox-arrow img-lightbox-prev" id="imgLightboxPrev" type="button" aria-label="Foto anterior">‹</button>
+    <button class="img-lightbox-arrow img-lightbox-next" id="imgLightboxNext" type="button" aria-label="Foto siguiente">›</button>
+  </div>
   <img class="img-lightbox-img" id="imgLightboxImg" src="" alt="">
 </div>
 

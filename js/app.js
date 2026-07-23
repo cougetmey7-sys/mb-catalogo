@@ -44,6 +44,8 @@ function initDOM() {
   DOM.cartDireccion = document.getElementById('cartDireccion');
   DOM.cartObs     = document.getElementById('cartObs');
   DOM.cartFab     = document.querySelector('.cart-fab');
+  DOM.ofertasDestSection = document.getElementById('ofertasDestacadasSection');
+  DOM.ofertasDestGrid    = document.getElementById('ofertasDestacadasGrid');
 }
 
 /* ─────────────────────────────────────────────
@@ -159,6 +161,43 @@ function filtrarProductos() {
 }
 
 /* ─────────────────────────────────────────────
+   OFERTAS DESTACADAS (sección fija, arriba de la portada)
+───────────────────────────────────────────── */
+function renderOfertasDestacadas() {
+  if (!DOM.ofertasDestGrid || !DOM.ofertasDestSection) return;
+  const destacadas = productos.filter(p => p.oferta && p.precio);
+  const btnVerOfertas = document.getElementById('verOfertasBtn');
+
+  if (!destacadas.length) {
+    DOM.ofertasDestSection.style.display = 'none';
+    if (btnVerOfertas) btnVerOfertas.style.display = 'none';
+    return;
+  }
+
+  DOM.ofertasDestSection.style.display = '';
+  if (btnVerOfertas) btnVerOfertas.style.display = '';
+  const frag = document.createDocumentFragment();
+  destacadas.forEach(p => {
+    frag.appendChild(crearTarjeta(p, { destacado: true, idPrefix: 'feat-' }));
+  });
+  DOM.ofertasDestGrid.innerHTML = '';
+  DOM.ofertasDestGrid.appendChild(frag);
+}
+
+function initOfertasDestacadasCarrusel() {
+  const prev = document.getElementById('ofertasDestPrev');
+  const next = document.getElementById('ofertasDestNext');
+  const scrollPor = dir => {
+    if (!DOM.ofertasDestGrid) return;
+    const tarjeta = DOM.ofertasDestGrid.querySelector('.pcard');
+    const ancho = tarjeta ? tarjeta.offsetWidth + 18 : 260; // 18px = gap
+    DOM.ofertasDestGrid.scrollBy({ left: dir * ancho * 2, behavior: 'smooth' });
+  };
+  prev?.addEventListener('click', () => scrollPor(-1));
+  next?.addEventListener('click', () => scrollPor(1));
+}
+
+/* ─────────────────────────────────────────────
    RENDER CATÁLOGO
 ───────────────────────────────────────────── */
 function renderCatalogo() {
@@ -196,38 +235,125 @@ function renderCatalogo() {
 }
 
 /* ─────────────────────────────────────────────
+   CARPETA AUTOMÁTICA DE FOTOS
+   Prueba 1.webp, 2.webp, 3.jpg... dentro de
+   images/<carpeta>/ hasta que una no exista.
+   No requiere listar nombres de archivo en el CSV.
+───────────────────────────────────────────── */
+const CARPETA_EXTENSIONES = ['webp', 'jpg', 'jpeg', 'png'];
+const CARPETA_MAX_FOTOS   = 10;
+
+function existeImagen(src) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
+  });
+}
+
+async function resolverFotoNumerada(carpeta, indice) {
+  for (const ext of CARPETA_EXTENSIONES) {
+    const src = `images/${carpeta}/${indice}.${ext}`;
+    if (await existeImagen(src)) return src;
+  }
+  return null;
+}
+
+async function resolverImagenesCarpeta(carpeta) {
+  const encontradas = [];
+  for (let i = 1; i <= CARPETA_MAX_FOTOS; i++) {
+    const src = await resolverFotoNumerada(carpeta, i);
+    if (!src) break; // se detiene en el primer número faltante
+    encontradas.push(src);
+  }
+  return encontradas;
+}
+
+async function resolverCarpetasDeProductos(lista) {
+  const conCarpeta = lista.filter(p => p.carpeta);
+  await Promise.all(conCarpeta.map(async p => {
+    const fotos = await resolverImagenesCarpeta(p.carpeta);
+    if (fotos.length) {
+      p.imagenes = fotos;      // la carpeta numerada tiene prioridad sobre imagen/imagen2..5
+      p.imagen   = fotos[0];
+    }
+  }));
+}
+
+/* ─────────────────────────────────────────────
    TARJETA DE PRODUCTO
 ───────────────────────────────────────────── */
-function crearTarjeta(p) {
+function crearTarjeta(p, opciones = {}) {
+  const { destacado = false, idPrefix = '' } = opciones;
   const enCarrito = !!carrito[p.id];
+  const fotos = (p.imagenes && p.imagenes.length) ? p.imagenes : (p.imagen ? [p.imagen] : []);
 
-  // Imagen: si tiene → img con fallback placeholder; si no → placeholder directo
-  const imgHtml = p.imagen
-    ? `<img src="${p.imagen}" alt="${p.nombre}" loading="lazy"
+  // Imagen: carrusel si hay 2+ fotos; una sola img si hay 1; placeholder si no hay ninguna
+  let imgHtml;
+  if (fotos.length > 1) {
+    const slides = fotos.map((src, i) =>
+      `<img src="${src}" alt="${p.nombre}" loading="lazy" class="pcard-slide${i === 0 ? ' is-active' : ''}" data-idx="${i}"
+            onerror="this.style.display='none'">`
+    ).join('');
+    const dots = fotos.map((_, i) =>
+      `<span class="pcard-dot${i === 0 ? ' is-active' : ''}" data-idx="${i}"></span>`
+    ).join('');
+    imgHtml = `
+      <div class="pcard-carousel" data-idx="0" data-total="${fotos.length}" data-id="${p.id}">
+        ${slides}
+        <button class="pcard-arrow pcard-arrow-prev" data-action="foto-prev" data-id="${p.id}" type="button" aria-label="Foto anterior">‹</button>
+        <button class="pcard-arrow pcard-arrow-next" data-action="foto-next" data-id="${p.id}" type="button" aria-label="Foto siguiente">›</button>
+        <div class="pcard-dots">${dots}</div>
+      </div>`;
+  } else if (fotos.length === 1) {
+    imgHtml = `<img src="${fotos[0]}" alt="${p.nombre}" loading="lazy"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
        ><div class="pcard-img-placeholder" style="display:none">
            <span>Imagen<br>próximamente</span>
-         </div>`
-    : `<div class="pcard-img-placeholder"><span>Imagen<br>próximamente</span></div>`;
+         </div>`;
+  } else {
+    imgHtml = `<div class="pcard-img-placeholder"><span>Imagen<br>próximamente</span></div>`;
+  }
+
+  // El precio SOLO se muestra en la sección de Ofertas Destacadas,
+  // nunca en la grilla normal del catálogo (aunque el producto tenga oferta=true).
+  const esOfertaConPrecio = destacado && p.oferta && p.precio;
+  const ribbonOferta = esOfertaConPrecio ? `<div class="pcard-ribbon-oferta">OFERTA</div>` : '';
+  const precioHtml = esOfertaConPrecio
+    ? `<div class="pcard-precio">${/^[\d.,]+$/.test(p.precio) ? '$' + p.precio : p.precio}</div>`
+    : '';
+  const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? 'Agregar al pedido' : '+ Agregar');
+  const descripcionHtml = p.descripcion ? `<div class="pcard-desc">${p.descripcion}</div>` : '';
+  const apedidoHtml = p.aPedido ? `<div class="pcard-badge-apedido">📦 Producto disponible por pedido</div>` : '';
+  const variantesHtml = p.variantes.length ? `
+      <select class="pcard-variant" id="${idPrefix}variant_${p.id}" aria-label="Elegir sabor/variante de ${p.nombre}">
+        ${p.variantes.map(v => `<option value="${v}">${v}</option>`).join('')}
+      </select>` : '';
 
   const div = document.createElement('div');
-  div.className  = 'pcard fade-up';
-  div.id         = `pcard_${p.id}`;
+  div.className  = 'pcard fade-up' + (esOfertaConPrecio ? ' pcard-oferta' : '');
+  div.id         = `${idPrefix}pcard_${p.id}`;
   div.dataset.id = p.id;
 
   div.innerHTML = `
     <div class="pcard-img-wrap">
+      ${ribbonOferta}
       ${imgHtml}
     </div>
     <div class="pcard-body">
+      ${apedidoHtml}
       <div class="pcard-name">${p.nombre}</div>
       ${p.marca ? `<div class="pcard-brand">${p.marca}</div>` : ''}
       <div class="pcard-peso">${p.peso}</div>
+      ${descripcionHtml}
+      ${precioHtml}
+      ${variantesHtml}
     </div>
     <div class="pcard-footer">
-      <button class="pcard-btn-add${enCarrito ? ' added' : ''}" id="btn_${p.id}"
+      <button class="pcard-btn-add${enCarrito ? ' added' : ''}" id="${idPrefix}btn_${p.id}"
               data-action="agregar" data-id="${p.id}" type="button">
-        ${enCarrito ? '✓ Agregado' : '+ Agregar'}
+        ${textoBoton}
       </button>
       <button class="pcard-btn-consult" data-action="consultar" data-id="${p.id}"
               type="button" title="Consultar" aria-label="Consultar ${p.nombre} por WhatsApp">💬</button>
@@ -237,32 +363,113 @@ function crearTarjeta(p) {
 }
 
 /* ─────────────────────────────────────────────
-   EVENT DELEGATION — grilla
+   CARRUSEL — mostrar una foto puntual del set
 ───────────────────────────────────────────── */
-function initGridDelegation() {
-  DOM.grid?.addEventListener('click', e => {
-    const img = e.target.closest('.pcard-img-wrap img');
-    if (img) { abrirLightbox(img.src, img.alt); return; }
-
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    const id = parseInt(btn.dataset.id, 10);
-    if (btn.dataset.action === 'agregar')   agregarAlCarrito(id);
-    if (btn.dataset.action === 'consultar') consultarProducto(id);
+function irAFotoCarrusel(carouselEl, idx) {
+  const total = parseInt(carouselEl.dataset.total, 10) || 1;
+  const nuevoIdx = ((idx % total) + total) % total; // wrap-around
+  carouselEl.dataset.idx = nuevoIdx;
+  carouselEl.querySelectorAll('.pcard-slide').forEach(img => {
+    img.classList.toggle('is-active', parseInt(img.dataset.idx, 10) === nuevoIdx);
+  });
+  carouselEl.querySelectorAll('.pcard-dot').forEach(dot => {
+    dot.classList.toggle('is-active', parseInt(dot.dataset.idx, 10) === nuevoIdx);
   });
 }
 
 /* ─────────────────────────────────────────────
-   LIGHTBOX — ampliar imagen de producto
+   EVENT DELEGATION — grilla
 ───────────────────────────────────────────── */
-function abrirLightbox(src, alt) {
+function initGridDelegation(container) {
+  container = container || DOM.grid;
+  container?.addEventListener('click', e => {
+    // Flechas del carrusel
+    const arrow = e.target.closest('[data-action="foto-prev"], [data-action="foto-next"]');
+    if (arrow) {
+      const carousel = arrow.closest('.pcard-carousel');
+      if (carousel) {
+        const dir = arrow.dataset.action === 'foto-next' ? 1 : -1;
+        irAFotoCarrusel(carousel, parseInt(carousel.dataset.idx, 10) + dir);
+      }
+      return;
+    }
+    // Puntos del carrusel
+    const dot = e.target.closest('.pcard-dot');
+    if (dot) {
+      const carousel = dot.closest('.pcard-carousel');
+      if (carousel) irAFotoCarrusel(carousel, parseInt(dot.dataset.idx, 10));
+      return;
+    }
+    // Clic en la foto → lightbox (con navegación si el producto tiene varias)
+    const img = e.target.closest('.pcard-img-wrap img');
+    if (img) {
+      const pcard = img.closest('.pcard');
+      const id = pcard ? parseInt(pcard.dataset.id, 10) : null;
+      const p  = id ? productos.find(x => x.id === id) : null;
+      const fotos = (p && p.imagenes && p.imagenes.length) ? p.imagenes : [img.src];
+      const carousel = img.closest('.pcard-carousel');
+      const idxActual = carousel ? parseInt(carousel.dataset.idx, 10) : 0;
+      abrirLightbox(fotos, idxActual, img.alt);
+      return;
+    }
+
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = parseInt(btn.dataset.id, 10);
+    if (btn.dataset.action === 'agregar')   agregarAlCarrito(id, btn);
+    if (btn.dataset.action === 'consultar') consultarProducto(id);
+  });
+
+  // Deslizar (swipe) para cambiar de foto en celular
+  let touchX = null;
+  container?.addEventListener('touchstart', e => {
+    const carousel = e.target.closest('.pcard-carousel');
+    touchX = carousel ? e.touches[0].clientX : null;
+  }, { passive: true });
+  container?.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const carousel = e.target.closest('.pcard-carousel');
+    if (!carousel) { touchX = null; return; }
+    const deltaX = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(deltaX) > 40) {
+      irAFotoCarrusel(carousel, parseInt(carousel.dataset.idx, 10) + (deltaX < 0 ? 1 : -1));
+    }
+    touchX = null;
+  }, { passive: true });
+}
+
+
+/* ─────────────────────────────────────────────
+   LIGHTBOX — ampliar imagen de producto (con navegación)
+───────────────────────────────────────────── */
+let lightboxFotos = [];
+let lightboxIdx   = 0;
+
+function renderLightboxImg() {
+  const img  = document.getElementById('imgLightboxImg');
+  const nav  = document.getElementById('imgLightboxNav');
+  if (!img) return;
+  img.src = lightboxFotos[lightboxIdx];
+  if (nav) nav.style.display = lightboxFotos.length > 1 ? 'flex' : 'none';
+}
+
+function abrirLightbox(fotos, idx, alt) {
   const overlay = document.getElementById('imgLightbox');
   const img     = document.getElementById('imgLightboxImg');
   if (!overlay || !img) return;
-  img.src = src;
+  lightboxFotos = Array.isArray(fotos) ? fotos : [fotos];
+  lightboxIdx   = idx || 0;
   img.alt = alt || '';
+  renderLightboxImg();
   overlay.classList.add('is-open');
   document.body.style.overflow = 'hidden';
+}
+
+function moverLightbox(delta) {
+  const total = lightboxFotos.length;
+  if (total <= 1) return;
+  lightboxIdx = ((lightboxIdx + delta) % total + total) % total;
+  renderLightboxImg();
 }
 
 function cerrarLightbox() {
@@ -272,11 +479,15 @@ function cerrarLightbox() {
   overlay.classList.remove('is-open');
   document.body.style.overflow = '';
   if (img) img.src = '';
+  lightboxFotos = [];
+  lightboxIdx = 0;
 }
 
 function initLightbox() {
-  const overlay = document.getElementById('imgLightbox');
+  const overlay  = document.getElementById('imgLightbox');
   const closeBtn = document.getElementById('imgLightboxClose');
+  const prevBtn  = document.getElementById('imgLightboxPrev');
+  const nextBtn  = document.getElementById('imgLightboxNext');
   if (!overlay) return;
 
   // Clic fuera de la imagen (en el fondo oscuro) cierra
@@ -284,11 +495,26 @@ function initLightbox() {
     if (e.target === overlay) cerrarLightbox();
   });
   closeBtn?.addEventListener('click', cerrarLightbox);
+  prevBtn?.addEventListener('click', e => { e.stopPropagation(); moverLightbox(-1); });
+  nextBtn?.addEventListener('click', e => { e.stopPropagation(); moverLightbox(1); });
 
-  // Tecla Esc cierra
+  // Teclado: Esc cierra, flechas navegan
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('is-open')) cerrarLightbox();
+    if (!overlay.classList.contains('is-open')) return;
+    if (e.key === 'Escape')   cerrarLightbox();
+    if (e.key === 'ArrowLeft')  moverLightbox(-1);
+    if (e.key === 'ArrowRight') moverLightbox(1);
   });
+
+  // Swipe en el lightbox (mobile)
+  let touchX = null;
+  overlay.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  overlay.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(deltaX) > 50) moverLightbox(deltaX < 0 ? 1 : -1);
+    touchX = null;
+  }, { passive: true });
 }
 
 /* ─────────────────────────────────────────────
@@ -323,16 +549,49 @@ function cargarCarritoGuardado() {
   } catch (_) { carrito = {}; }
 }
 
-function agregarAlCarrito(id) {
+function agregarAlCarrito(id, btnOrigen) {
   const p = productos.find(x => x.id === id);
   if (!p) return;
 
-  if (carrito[id]) {
-    carrito[id].cantidad++;
+  let variante = null;
+  if (p.variantes && p.variantes.length) {
+    // Leer el selector DENTRO de la misma tarjeta que disparó el clic
+    // (evita confundir la tarjeta de Ofertas con la de su categoría).
+    const card = btnOrigen ? btnOrigen.closest('.pcard') : null;
+    const sel  = card ? card.querySelector('.pcard-variant') : document.getElementById(`variant_${id}`);
+    variante = sel ? sel.value : p.variantes[0];
+  }
+  const key = variante ? `${id}::${variante}` : String(id);
+  const esNuevo = !carrito[key];
+
+  if (carrito[key]) {
+    carrito[key].cantidad++;
   } else {
-    carrito[id] = { producto: p, cantidad: 1 };
-    const btn = document.getElementById(`btn_${id}`);
-    if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); }
+    carrito[key] = { producto: p, cantidad: 1, variante };
+  }
+
+  if (variante) {
+    // Feedback transitorio SOLO en el botón que se tocó: con variantes,
+    // un mismo producto puede tener varias líneas de carrito (una por sabor),
+    // así que no conviene marcar TODAS sus tarjetas como "agregado" fijo.
+    const btn = btnOrigen || document.getElementById(`btn_${id}`);
+    if (btn) {
+      const original = textoBotonPara(btn);
+      btn.textContent = '✓ Agregado';
+      btn.classList.add('added');
+      clearTimeout(btn._resetTimer);
+      btn._resetTimer = setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('added');
+      }, 1400);
+    }
+  } else if (esNuevo) {
+    // Sin variantes: reflejar "agregado" en TODAS las instancias del producto
+    // (por si aparece a la vez en Ofertas y en su categoría).
+    botonesAgregarDe(id).forEach(btn => {
+      btn.textContent = '✓ Agregado';
+      btn.classList.add('added');
+    });
   }
 
   guardarCarrito();
@@ -343,28 +602,44 @@ function agregarAlCarrito(id) {
   }
 }
 
-function quitarDelCarrito(id) {
-  delete carrito[id];
-  const btn = document.getElementById(`btn_${id}`);
-  if (btn) { btn.textContent = '+ Agregar'; btn.classList.remove('added'); }
+function botonesAgregarDe(id) {
+  return document.querySelectorAll(`[data-action="agregar"][data-id="${id}"]`);
+}
+
+function textoBotonPara(btnEl) {
+  return btnEl.closest('.pcard')?.classList.contains('pcard-oferta') ? 'Agregar al pedido' : '+ Agregar';
+}
+
+function quitarDelCarrito(key) {
+  const item = carrito[key];
+  delete carrito[key];
+  if (item && !item.variante) {
+    botonesAgregarDe(item.producto.id).forEach(btn => {
+      btn.textContent = textoBotonPara(btn);
+      btn.classList.remove('added');
+    });
+  }
   guardarCarrito();
   actualizarBadgeCarrito();
   renderItemsCarrito();
 }
 
-function cambiarCantidad(id, delta) {
-  if (!carrito[id]) return;
-  carrito[id].cantidad += delta;
-  if (carrito[id].cantidad <= 0) { quitarDelCarrito(id); return; }
+function cambiarCantidad(key, delta) {
+  if (!carrito[key]) return;
+  carrito[key].cantidad += delta;
+  if (carrito[key].cantidad <= 0) { quitarDelCarrito(key); return; }
   guardarCarrito();
   actualizarBadgeCarrito();
   renderItemsCarrito();
 }
 
 function vaciarCarrito() {
-  Object.keys(carrito).forEach(id => {
-    const btn = document.getElementById(`btn_${id}`);
-    if (btn) { btn.textContent = '+ Agregar'; btn.classList.remove('added'); }
+  Object.values(carrito).forEach(item => {
+    if (item.variante) return; // botones de variante ya vuelven solos (timeout)
+    botonesAgregarDe(item.producto.id).forEach(btn => {
+      btn.textContent = textoBotonPara(btn);
+      btn.classList.remove('added');
+    });
   });
   carrito = {};
   guardarCarrito();
@@ -397,7 +672,7 @@ function renderItemsCarrito() {
   DOM.cartItems.style.display = 'flex';
   DOM.cartFoot.style.display  = 'flex';
 
-  DOM.cartItems.innerHTML = items.map(({ producto: p, cantidad }) => `
+  DOM.cartItems.innerHTML = Object.entries(carrito).map(([key, { producto: p, cantidad, variante }]) => `
     <div class="cart-item">
       <div class="cart-item-img-wrap">
         ${p.imagen
@@ -408,14 +683,14 @@ function renderItemsCarrito() {
       </div>
       <div class="cart-item-info">
         <div class="cart-item-name">${p.nombre}</div>
-        <div class="cart-item-brand">${p.marca ? p.marca + ' · ' : ''}${p.peso}</div>
+        <div class="cart-item-brand">${p.marca ? p.marca + ' · ' : ''}${p.peso}${variante ? ' · Sabor: ' + variante : ''}</div>
         <div class="cart-item-controls">
-          <button class="cart-qty-btn" type="button" data-cart-action="menos" data-cart-id="${p.id}" aria-label="Reducir">−</button>
+          <button class="cart-qty-btn" type="button" data-cart-action="menos" data-cart-key="${key}" aria-label="Reducir">−</button>
           <span class="cart-qty-num" aria-live="polite">${cantidad}</span>
-          <button class="cart-qty-btn" type="button" data-cart-action="mas"   data-cart-id="${p.id}" aria-label="Aumentar">+</button>
+          <button class="cart-qty-btn" type="button" data-cart-action="mas"   data-cart-key="${key}" aria-label="Aumentar">+</button>
         </div>
       </div>
-      <button class="cart-item-del" type="button" data-cart-action="quitar" data-cart-id="${p.id}" title="Eliminar" aria-label="Eliminar ${p.nombre}">✕</button>
+      <button class="cart-item-del" type="button" data-cart-action="quitar" data-cart-key="${key}" title="Eliminar" aria-label="Eliminar ${p.nombre}">✕</button>
     </div>`).join('');
 }
 
@@ -423,11 +698,11 @@ function initCartDelegation() {
   DOM.cartItems?.addEventListener('click', e => {
     const btn = e.target.closest('[data-cart-action]');
     if (!btn) return;
-    const id     = parseInt(btn.dataset.cartId, 10);
+    const key    = btn.dataset.cartKey;
     const action = btn.dataset.cartAction;
-    if (action === 'mas')    cambiarCantidad(id, +1);
-    if (action === 'menos')  cambiarCantidad(id, -1);
-    if (action === 'quitar') quitarDelCarrito(id);
+    if (action === 'mas')    cambiarCantidad(key, +1);
+    if (action === 'menos')  cambiarCantidad(key, -1);
+    if (action === 'quitar') quitarDelCarrito(key);
   });
 }
 
@@ -460,8 +735,8 @@ function enviarPedido() {
 
   const totalUnidades = items.reduce((s, { cantidad }) => s + cantidad, 0);
 
-  const lineas = items.map(({ producto: p, cantidad }) =>
-    `• ${p.nombre}${p.marca ? ' — ' + p.marca : ''}\n  Cantidad: ${cantidad}\n  Presentación: ${p.peso}`
+  const lineas = items.map(({ producto: p, cantidad, variante }) =>
+    `• ${p.nombre}${p.marca ? ' — ' + p.marca : ''}${variante ? '\n  Sabor: ' + variante : ''}\n  Cantidad: ${cantidad}\n  Presentación: ${p.peso}`
   ).join('\n\n');
 
   const partes = [
@@ -557,7 +832,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
   initNavbar();
   construirFiltros();
-  initGridDelegation();
+  initGridDelegation(DOM.grid);
+  initGridDelegation(DOM.ofertasDestGrid);
+  initOfertasDestacadasCarrusel();
   initCartDelegation();
   initLightbox();
   DOM.search?.addEventListener('input', onBusqueda);
@@ -568,13 +845,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (DOM.info) DOM.info.innerHTML = 'Cargando catálogo…';
   productos = await cargarProductos();
 
+  // Productos con "carpeta" cargada: resolver sus fotos numeradas (1.webp, 2.webp...)
+  await resolverCarpetasDeProductos(productos);
+
   // Reconstruir botones de carrito según estado guardado
-  Object.keys(carrito).forEach(id => {
-    const btn = document.getElementById(`btn_${parseInt(id, 10)}`);
-    if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); }
+  Object.values(carrito).forEach(item => {
+    if (item.variante) return; // los de variante no llevan estado persistente en el botón
+    botonesAgregarDe(item.producto.id).forEach(btn => {
+      btn.textContent = '✓ Agregado';
+      btn.classList.add('added');
+    });
   });
 
   construirIndice();
   actualizarBadgeCarrito();
+  renderOfertasDestacadas();
   renderCatalogo();
 });

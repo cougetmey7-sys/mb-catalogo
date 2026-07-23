@@ -14,21 +14,46 @@
 #   categoria  → quesos | fiambres | lacteos | conservas | aderezos | especias | bebidas | otros
 #   peso       → presentación o unidad (texto libre)
 #   imagen     → solo el nombre del archivo (sin "images/") — vacío si no hay foto
-#   oferta     → true o false
+#   oferta     → true o false → true = aparece en la pestaña "🔥 Ofertas"
 #   nuevo      → true o false
 #   masVendido → true o false
 #   aPedido    → true o false
+#   imagen2    → (OPCIONAL) segunda foto del producto — deja vacío si no tiene
+#   imagen3    → (OPCIONAL) tercera foto — deja vacío si no tiene
+#   imagen4    → (OPCIONAL) cuarta foto — deja vacío si no tiene
+#   imagen5    → (OPCIONAL) quinta foto — deja vacío si no tiene
+#                Si un producto tiene 2 o más fotos cargadas, el catálogo muestra
+#                flechas/deslizar automáticamente. No hace falta tocar código.
+#   precio     → (OPCIONAL) solo se muestra si oferta=true. Poné el número solo
+#                (ej: 12500) y el catálogo le agrega el "$" automáticamente.
+#                Para sacar un producto de Ofertas: cambiá oferta a false
+#                (podés dejar el precio cargado, no se muestra si oferta=false).
+#   carpeta    → (OPCIONAL, MODO AVANZADO) alternativa a imagen/imagen2../imagen5.
+#                Si cargás un nombre acá (ej: queso-cremoso), el catálogo busca
+#                automáticamente las fotos images/queso-cremoso/1.webp, 2.webp,
+#                3.webp... (también acepta .jpg/.jpeg/.png) hasta que falte un
+#                número. Para agregar/sacar fotos de ese producto, ALCANZA con
+#                copiar o borrar archivos en esa carpeta — no hay que tocar
+#                este CSV ni el código para nada. Si usás "carpeta", podés dejar
+#                vacías las columnas imagen/imagen2../imagen5 de esa fila.
+#   variantes  → (OPCIONAL) opciones que el cliente elige antes de agregar al
+#                carrito (ej: sabores, tamaños). Separadas por "|", por ejemplo:
+#                Hierbas|Picante  → aparece un selector desplegable en la
+#                tarjeta y el sabor elegido queda anotado en el pedido de
+#                WhatsApp. Dejar vacío si el producto no tiene variantes.
+#   descripcion → (OPCIONAL) texto libre corto debajo de la presentación
+#                (ej: "Disponible en dos sabores: Hierbas y Picante.")
 # ═══════════════════════════════════════════════
 
-id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
+id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido,imagen2,imagen3,imagen4,precio,imagen5,carpeta,descripcion,variantes
 
 # ── QUESOS ───────────────────────────────────────────────────────────────────
 1,Queso Cremoso,La Paulina,quesos,Horma aprox. 4 kg,queso-cremoso-la-paulina.jpg,false,false,true,false
-3,Queso Pategrás,La Paulina,quesos,Horma aprox. 4 kg,queso-pategras-la-paulina.jpg,false,false,false,false
-4,Queso Fontina,La Paulina,quesos,Horma aprox. 3.5 kg,queso-fontina-la-paulina.jpg,false,false,false,false
-5,Queso Gouda,La Paulina,quesos,Horma aprox. 3.5 kg,queso-gouda-la-paulina.jpg,false,false,false,false
+3,Queso Pategrás,La Paulina,quesos,Horma aprox. 4 kg,queso-pategras-la-paulina.jpg,false,false,false,true,,,,,,,Este producto se solicita con anticipación. Consultar disponibilidad antes de realizar el pedido.,
+4,Queso Fontina,La Paulina,quesos,Horma aprox. 3.5 kg,queso-fontina-la-paulina.jpg,false,false,false,true,,,,,,,Este producto se solicita con anticipación. Consultar disponibilidad antes de realizar el pedido.,
+5,Queso Gouda,La Paulina,quesos,Horma aprox. 3.5 kg,queso-gouda-la-paulina.jpg,false,false,false,true,,,,,,,Este producto se solicita con anticipación. Consultar disponibilidad antes de realizar el pedido.,
 6,Queso de Crema,La Paulina,quesos,Pouch 4 kg,queso-crema-la-paulina.jpg,false,false,false,false
-7,Queso Tybo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-tybo-lacteos-union.jpg,false,false,false,false
+7,Queso Tybo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-tybo-lacteos-union.jpg,true,false,false,false,,,,$9.000 / kg,,,,
 8,Queso Pategrás,Lácteos Unión,quesos,Horma aprox. 4 kg,queso-pategras-lacteos-union.jpg,false,false,false,false
 9,Queso Sardo,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-sardo-lacteos-union.jpg,false,false,false,false
 10,Queso Romano,Lácteos Unión,quesos,Horma aprox. 3 kg,queso-romano-lacteos-union.jpg,false,true,false,false
@@ -36,12 +61,12 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 12,Queso Muzzarella,Lácteos Unión,quesos,Barra aprox. 4 kg,queso-muzzarella-lacteos-union.jpg,false,false,true,false
 13,Queso Azul,Sancarlina,quesos,Horma aprox. 3 kg,queso-azul-sancarlina.jpg,false,false,false,false
 59,Queso Sardo,Oro,quesos,Horma aprox. 3 kg,queso-sardo-oro.jpg,false,false,false,false
-60,Queso Tybo Senda,La Paulina,quesos,Horma aprox. 4 kg,tybo-senda-la-paulina.jpg,false,false,false,false
+60,Queso Tybo Senda,La Paulina,quesos,Horma aprox. 4 kg,tybo-senda-la-paulina.jpg,true,false,false,false,,,,$13.030 / kg,,,,
 61,Queso Cheddar Pouch,La Paulina,quesos,Pouch 4 kg,cheddar-pouch-la-paulina.jpg,false,false,false,false
 
 # ── FIAMBRES ─────────────────────────────────────────────────────────────────
 16,Jamón Cocido,Tacural,fiambres,Horma aprox. 5 kg,jamon-cocido-tacural.jpg,false,false,true,false
-17,Jamón Cocido,El Colonial,fiambres,Horma aprox. 5 kg,jamon-cocido-el-colonial.jpg,false,false,false,false
+17,Jamón Cocido,El Colonial,fiambres,Horma aprox. 5 kg,jamon-cocido-el-colonial.jpg,true,false,false,false,,,,$9.030 / kg,,,,
 18,Panceta Ahumada,El Colonial,fiambres,Aprox. 1.5 kg,panceta-ahumada-el-colonial.jpg,false,false,false,true
 19,Ahumados,La Tirolesa,fiambres,Aprox. 1.5 kg,ahumado-la-tirolesa.jpg,false,false,false,false
 20,Salame Milán Picado Fino,La Tirolesa,fiambres,Unidad,salame-milan-fino-la-tirolesa.jpg,false,false,true,false
@@ -49,24 +74,24 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 22,Salamín Tipo Milán,Nutral Pig,fiambres,Unidad,salamin-tipo-milan-nutral-pig.jpg,false,false,false,false
 24,Bondiola,Natural Pig,fiambres,Unidad,bondiola-natural-pig.jpg,false,false,false,false
 62,Jamón Crudo,Tacural,fiambres,Aprox. 3 kg,jamon-crudo-tacural.jpg,false,false,false,false
-63,Jamón Cocido,La Tirolesa,fiambres,Aprox. 5.6 kg,jamon-cocido-la-tirolesa.jpg,false,false,false,false
-64,Jamonada,La Tirolesa,fiambres,Aprox. 5.6 kg,jamonada-la-tirolesa.jpg,false,false,false,false
+63,Jamón Cocido,La Tirolesa,fiambres,Aprox. 5.6 kg,jamon-cocido-la-tirolesa.jpg,true,false,false,false,,,,$7.400 / kg,,,,
+64,Jamonada,La Tirolesa,fiambres,Aprox. 5.6 kg,jamonada-la-tirolesa.jpg,true,false,false,false,,,,$4.320 / kg,,,,
 
 # ── LÁCTEOS ──────────────────────────────────────────────────────────────────
 25,Crema para Batir 36%,La Paulina,lacteos,Balde 5000 cc,crema-la-paulina.jpg,false,false,true,false
-26,Leche Entera,Tregar,lacteos,Caja 12u x 1 L,leche-entera-tregar.jpg,false,false,false,false
+26,Leche Entera,COTAPA,lacteos,Caja 12u x 1 L,leche-entera-cotapa.jpg,false,false,false,false
 27,Manteca Clásica,Cotampo,lacteos,Pan 2.5 kg,manteca-cotampo.jpg,false,false,false,false
 65,Crema Doble,La Paulina,lacteos,Balde 5 kg,crema-doble-la-paulina.jpg,false,false,false,false
 
 # ── CONSERVAS ────────────────────────────────────────────────────────────────
-29,Tomate Triturado,Finca de Santiago,conservas,Pouch - Caja 4 unidades x 2 kg c/u,tomate-triturado-pouch-finca-de-santiago.jpg,false,false,true,false
+29,Tomate Triturado,Finca de Santiago,conservas,Pouch - Caja 4 unidades x 2 kg c/u,tomate-triturado-pouch-finca-de-santiago.jpg,true,false,true,false,,,,$7.180 la caja x 4 u.,,,,
 31,Choclo en Grano,Finca de Santiago,conservas,Lata 800 g,choclo-en-grano-finca-de-santiago.jpg,false,false,false,false
 32,Durazno en Mitades,Gentleman,conservas,Lata 820 g,durazno-en-mitades-gentleman.jpg,false,false,false,false
 33,Ananá en Rodajas,Gentleman,conservas,Lata 820 g,anana-en-rodajas-gentleman.jpg,false,false,false,false
 34,Cóctel de Cuatro Frutas,Gentleman,conservas,Lata 820 g,coctel-de-frutas-gentleman.jpg,false,false,false,false
 35,Palmitos en Rodajas,Finca de Santiago,conservas,Lata 800 g,palmitos-en-rodajas-finca-de-santiago.jpg,false,true,false,false
 36,Pimientos Morrón Enteros,Finca de Santiago,conservas,Lata 750 g,morron-entero-finca-de-santiago.jpg,false,true,false,false
-72,Puré de Tomate,Finca de Santiago,conservas,Caja 16 unidades x 520 g c/u,pure-de-tomate-finca-de-santiago.jpg,false,false,false,false
+72,Puré de Tomate,Finca de Santiago,conservas,Caja 16 unidades x 520 g c/u,pure-de-tomate-finca-de-santiago.jpg,true,false,false,false,,,,$9.080 la caja x 16 u.,,,,
 38,Aceitunas Verdes Enteras,Arauco,conservas,Balde 5 kg,aceitunas-verdes-enteras.jpg,false,false,false,false
 39,Aceitunas Negras Fileteadas,,conservas,Balde 5 kg,aceitunas-negras-fileteadas.jpg,false,false,false,false
 40,Aceitunas Verdes Fileteadas,,conservas,Balde 5 kg,aceitunas-verdes-fileteadas.jpg,false,false,false,false
@@ -93,12 +118,14 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido
 51,Vinagre de Vino,San Bernandino,bebidas,Bidón 5 L,vinagre-vino-san-bernandino.jpg,false,false,false,false
 
 # ── OTROS ────────────────────────────────────────────────────────────────────
-52,Sal Hierbas,Don Burro,otros,300 g aprox.,sal-hierbas-don-burro.jpg,false,false,false,false
-53,Sal Picante,Don Burro,otros,300 g aprox.,sal-picante-don-burro.jpg,false,false,false,false
+53,Sal Saborizada,Don Burro,otros,300 g,sal-saborizada-don-burro.jpg,true,false,false,false,,,,$1.799,,,Disponible en dos sabores: Hierbas y Picante.,Hierbas|Picante
 54,Sal Fina,Celusal,otros,500 g,sal-fina-celusal.jpg,false,false,false,false
 55,Azúcar Clásica,Ledesma,otros,Pack 10u x 1 kg,azucar-clasica-ledesma.jpg,false,true,false,false
 56,Pan Rallado,,otros,Bolsa 5 kg,pan-rallado.jpg,false,false,true,false
 57,Pionono,,otros,Unidad,pionono.jpg,false,false,false,false
-58,Aceite,,otros,Bidón 10 L retornable,aceite-10l.jpg,false,false,true,false
+58,Aceite,,otros,Bidón 10 L retornable,aceite-10l.jpg,true,false,true,false,,,,$26.400 c/u,,,,
 70,Aceite de Oliva,Ebenezer,otros,2 L,aceite-oliva-ebenezer.jpg,false,false,false,false
 71,Pulpa de Frutilla,Emalubi,otros,1 kg,pulpa-de-frutilla-emalubi.jpg,false,false,false,false
+73,Queso Saborizado,Serranos,quesos,160 g,queso-serrano-chimichurri.jpg,true,false,false,false,queso-serrano-oregano.jpg,queso-serrano-ajo.jpg,queso-serrano-aji.jpg,$3.999 c/u,queso-serrano-natural.jpg,,,
+74,Salame Milán Picado Grueso,La Tirolesa,fiambres,Aprox. 2 kg,salame-milan-picado-grueso-la-tirolesa.jpg,false,false,false,false
+75,Salamín,Natural Pig,fiambres,1 gancho x 30 unidades,salamin-natural-pig.jpg,true,false,false,false,,,,$3.800 c/u,,,,

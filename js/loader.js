@@ -66,7 +66,9 @@ function parsearCSV(texto) {
 ───────────────────────────────────────────── */
 function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
   const [id, nombre, marca, categoria, peso, imagen,
-         oferta, nuevo, masVendido, aPedido] = raw;
+         oferta, nuevo, masVendido, aPedido,
+         imagen2, imagen3, imagen4, precio, imagen5, carpeta,
+         descripcion, variantes] = raw;
 
   // ── Campos obligatorios ──
   const vacios = [];
@@ -126,51 +128,69 @@ function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
     return null;
   }
 
-  // ── Imagen ──
-  const imgNombre = (imagen || '').trim();
-  if (imgNombre) {
-    if (/\s/.test(imgNombre)) {
-      errores.push({
-        fila:     numFila,
-        producto: nombre,
-        problema: `El nombre de imagen contiene espacios: "${imgNombre}". Usar guión (-) en vez de espacio.`,
-      });
-      return null;
+  // ── Imagen (y validador reutilizable para imagen2/3/4) ──
+  function validarNombreImagen(valor, etiqueta) {
+    const val = (valor || '').trim();
+    if (!val) return '';
+    if (/\s/.test(val)) {
+      errores.push({ fila: numFila, producto: nombre,
+        problema: `${etiqueta} contiene espacios: "${val}". Usar guión (-) en vez de espacio.` });
+      return '';
     }
-    const punto = imgNombre.lastIndexOf('.');
+    const punto = val.lastIndexOf('.');
     if (punto === -1) {
-      errores.push({
-        fila:     numFila,
-        producto: nombre,
-        problema: `La imagen no tiene extensión: "${imgNombre}". Usar: ${[...EXT_VALIDAS].join(', ')}.`,
-      });
-      return null;
+      errores.push({ fila: numFila, producto: nombre,
+        problema: `${etiqueta} no tiene extensión: "${val}". Usar: ${[...EXT_VALIDAS].join(', ')}.` });
+      return '';
     }
-    const ext = imgNombre.slice(punto).toLowerCase();
+    const ext = val.slice(punto).toLowerCase();
     if (!EXT_VALIDAS.has(ext)) {
-      errores.push({
-        fila:     numFila,
-        producto: nombre,
-        problema: `Extensión de imagen no válida: "${ext}". Usar: ${[...EXT_VALIDAS].join(', ')}.`,
-      });
-      return null;
+      errores.push({ fila: numFila, producto: nombre,
+        problema: `${etiqueta} con extensión no válida: "${ext}". Usar: ${[...EXT_VALIDAS].join(', ')}.` });
+      return '';
     }
+    return val;
   }
+
+  const imgNombre = validarNombreImagen(imagen, 'La imagen');
+  if (imagen && !imgNombre) return null; // imagen principal inválida → fila descartada (igual que antes)
+
+  const img2 = validarNombreImagen(imagen2, 'imagen2');
+  const img3 = validarNombreImagen(imagen3, 'imagen3');
+  const img4 = validarNombreImagen(imagen4, 'imagen4');
+  const img5 = validarNombreImagen(imagen5, 'imagen5');
+
+  const carpetaVal = (carpeta || '').trim();
+  if (carpetaVal && /\s/.test(carpetaVal)) {
+    errores.push({ fila: numFila, producto: nombre,
+      problema: `carpeta contiene espacios: "${carpetaVal}". Usar guión (-) en vez de espacio.` });
+  }
+
+  const imagenes = [imgNombre, img2, img3, img4, img5]
+    .filter(Boolean)
+    .map(nombreArch => IMAGEN_PREFIX + nombreArch);
 
   idsVistos.add(idNum);
   nombresVistos.add(claveNombre);
 
   return {
-    id:         idNum,
-    nombre:     nombre,
-    marca:      marca,
-    categoria:  categoria.toLowerCase(),
-    peso:       peso  || '',
-    imagen:     imgNombre ? IMAGEN_PREFIX + imgNombre : '',
-    oferta:     BOOL_TRUE.has((oferta     || '').toLowerCase()),
-    nuevo:      BOOL_TRUE.has((nuevo      || '').toLowerCase()),
-    masVendido: BOOL_TRUE.has((masVendido || '').toLowerCase()),
-    aPedido:    BOOL_TRUE.has((aPedido    || '').toLowerCase()),
+    id:          idNum,
+    nombre:      nombre,
+    marca:       marca,
+    categoria:   categoria.toLowerCase(),
+    peso:        peso  || '',
+    imagen:      imgNombre ? IMAGEN_PREFIX + imgNombre : '',
+    imagenes:    imagenes,               // array con todas las fotos válidas (columnas imagen..imagen5)
+    carpeta:     (carpeta || '').trim(), // (OPCIONAL) si está cargada, se prueban fotos numeradas 1,2,3... en images/<carpeta>/
+    precio:      (precio || '').trim(),  // solo se usa/muestra si oferta=true
+    descripcion: (descripcion || '').trim(), // (OPCIONAL) texto libre debajo de la presentación
+    variantes:   (variantes || '').trim()
+                   ? variantes.split('|').map(v => v.trim()).filter(Boolean)
+                   : [],                 // (OPCIONAL) ej: "Hierbas|Picante" → selector de sabor/variante
+    oferta:      BOOL_TRUE.has((oferta     || '').toLowerCase()),
+    nuevo:       BOOL_TRUE.has((nuevo      || '').toLowerCase()),
+    masVendido:  BOOL_TRUE.has((masVendido || '').toLowerCase()),
+    aPedido:     BOOL_TRUE.has((aPedido    || '').toLowerCase()),
   };
 }
 
