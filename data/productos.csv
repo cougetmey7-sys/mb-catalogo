@@ -43,9 +43,14 @@
 #                WhatsApp. Dejar vacío si el producto no tiene variantes.
 #   descripcion → (OPCIONAL) texto libre corto debajo de la presentación
 #                (ej: "Disponible en dos sabores: Hierbas y Picante.")
+#   consultarPrecio → (OPCIONAL) true o false. Si es true, la tarjeta muestra
+#                "💬 Consultar precio" (para productos sin precio de lista,
+#                normalmente combinado con aPedido=true). No calcula ni
+#                muestra ningún precio en el carrito ni en el pedido de
+#                WhatsApp — solo es un texto informativo en la tarjeta.
 # ═══════════════════════════════════════════════
 
-id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido,imagen2,imagen3,imagen4,precioOferta,imagen5,carpeta,descripcion,variantes
+id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido,imagen2,imagen3,imagen4,precioOferta,imagen5,carpeta,descripcion,variantes,consultarPrecio
 
 # ── QUESOS ───────────────────────────────────────────────────────────────────
 1,Queso Cremoso,La Paulina,quesos,Horma aprox. 4 kg,queso-cremoso-la-paulina.jpg,false,false,true,false
@@ -133,3 +138,12 @@ id,nombre,marca,categoria,peso,imagen,oferta,nuevo,masVendido,aPedido,imagen2,im
 79,Queso Serrano Natural,Serranos,quesos,160 g,queso-serrano-natural.jpg,true,false,false,false,,,,$3.999 cada uno,,,,
 74,Salame Milán Picado Grueso,La Tirolesa,fiambres,Aprox. 2 kg,salame-milan-picado-grueso-la-tirolesa.jpg,false,false,false,false
 75,Salamín,Natural Pig,fiambres,1 gancho x 30 unidades,salamin-natural-pig.jpg,true,false,false,false,,,,$3.800 cada unidad,,,,
+
+# ── PASTELERÍA Y REPOSTERÍA ───────────────────────────────────────────────────
+80,Brownie sabor chocolate,Ledevit,pasteleria,Bolsa de 470 g,brownie-chocolate-ledevit-470g.jpeg,false,false,false,true,,,,,,,Premezcla para preparar brownie. Sin gluten.,,true
+81,Budín sabor chocolate,Ledevit,pasteleria,Bolsa de 500 g,budin-chocolate-ledevit-500g.jpeg,false,false,false,true,,,,,,,Premezcla para preparar budín. Sin gluten.,,true
+82,Budín sabor vainilla,Ledevit,pasteleria,Bolsa de 500 g,budin-vainilla-ledevit-500g.jpeg,false,false,false,true,,,,,,,Premezcla para preparar budín. Sin gluten.,,true
+83,Crema Lemon,Ledevit,pasteleria,Bolsa de 1 kg,crema-lemon-ledevit-1kg.jpeg,false,false,false,true,,,,,,,Polvo para preparar crema sabor limón; ideal para postres tipo lemon pie. Sin gluten.,,true
+84,Cobertura de chocolate amargo,Ledevit – Paris Coberturas,pasteleria,Balde de 4 kg,cobertura-chocolate-amargo-paris-ledevit-4kg.jpeg,false,false,false,true,,,,,,,Cobertura sabor chocolate amargo.,,true
+85,Cupcakes sabor chocolate,Ledevit,pasteleria,Bolsa de 500 g,cupcakes-chocolate-ledevit-500g.jpeg,false,false,false,true,,,,,,,Premezcla para preparar cupcakes; rinde 12 cupcakes según envase. Sin gluten.,,true
+86,Merengue con clara de huevo,Ledevit,pasteleria,Bolsa de 1 kg,merengue-clara-huevo-ledevit-1kg.jpeg,false,false,false,true,,,,,,,Polvo para preparar merengue con clara de huevo; ideal para merengue italiano y francés. Uso en pastelería industrial y profesional. Sin gluten.,,true

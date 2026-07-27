@@ -68,7 +68,7 @@ function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
   const [id, nombre, marca, categoria, peso, imagen,
          oferta, nuevo, masVendido, aPedido,
          imagen2, imagen3, imagen4, precioOferta, imagen5, carpeta,
-         descripcion, variantes] = raw;
+         descripcion, variantes, consultarPrecio] = raw;
 
   // ── Campos obligatorios ──
   const vacios = [];
@@ -191,6 +191,7 @@ function validarFila(raw, numFila, idsVistos, nombresVistos, errores) {
     nuevo:       BOOL_TRUE.has((nuevo      || '').toLowerCase()),
     masVendido:  BOOL_TRUE.has((masVendido || '').toLowerCase()),
     aPedido:     BOOL_TRUE.has((aPedido    || '').toLowerCase()),
+    consultarPrecio: BOOL_TRUE.has((consultarPrecio || '').toLowerCase()), // muestra "Consultar precio" en la tarjeta
   };
 }
 

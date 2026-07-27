@@ -1886,3 +1886,55 @@ footer {
   margin-bottom: 6px;
   letter-spacing: .3px;
 }
+
+/* ─────────────────────────────────────────────
+   "CONSULTAR PRECIO" — productos sin precio de lista
+───────────────────────────────────────────── */
+.pcard-consultar-precio {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gris-lt);
+  margin-top: 6px;
+}
+
+/* ─────────────────────────────────────────────
+   UBICACIÓN Y ZONA DE COBERTURA
+───────────────────────────────────────────── */
+.hero-location {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--gris2);
+  border-left: 3px solid var(--rojo);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 480px;
+}
+.hero-location strong {
+  font-size: 14px;
+  color: var(--blanco);
+  letter-spacing: .2px;
+}
+.hero-location span {
+  font-size: 12.5px;
+  color: var(--gris-txt);
+  line-height: 1.4;
+}
+
+.footer-location {
+  font-size: 12.5px !important;
+  color: #999 !important;
+  line-height: 1.5 !important;
+  max-width: 320px;
+  margin-top: 4px !important;
+  margin-bottom: 12px !important;
+}
+
+@media (max-width: 480px) {
+  .hero-location { max-width: 100%; }
+}

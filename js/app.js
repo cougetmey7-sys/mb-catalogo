@@ -335,6 +335,7 @@ function crearTarjeta(p, opciones = {}) {
   const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? '🛒 Agregar al pedido' : '+ Agregar');
   const descripcionHtml = p.descripcion ? `<div class="pcard-desc">${p.descripcion}</div>` : '';
   const apedidoHtml = p.aPedido ? `<div class="pcard-badge-apedido">📦 Producto disponible por pedido</div>` : '';
+  const consultarPrecioHtml = p.consultarPrecio ? `<div class="pcard-consultar-precio">💬 Consultar precio</div>` : '';
   const variantesHtml = p.variantes.length ? `
       <select class="pcard-variant" id="${idPrefix}variant_${p.id}" aria-label="Elegir sabor/variante de ${p.nombre}">
         ${p.variantes.map(v => `<option value="${v}">${v}</option>`).join('')}
@@ -356,6 +357,7 @@ function crearTarjeta(p, opciones = {}) {
       ${p.marca ? `<div class="pcard-brand">${p.marca}</div>` : ''}
       <div class="pcard-peso">${p.peso}</div>
       ${descripcionHtml}
+      ${consultarPrecioHtml}
       ${precioHtml}
       ${variantesHtml}
     </div>

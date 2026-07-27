@@ -14,14 +14,15 @@
 ═══════════════════════════════════════════════ */
 
 const CATEGORIAS = {
-  quesos:    { label: '🧀 Quesos'    },
-  fiambres:  { label: '🥩 Fiambres'  },
-  lacteos:   { label: '🥛 Lácteos'   },
-  conservas: { label: '🥫 Conservas' },
-  aderezos:  { label: '🧴 Aderezos'  },
-  especias:  { label: '🌿 Especias'  },
-  bebidas:   { label: '🥤 Bebidas'   },
-  otros:     { label: '🛒 Otros'     },
+  quesos:      { label: '🧀 Quesos'      },
+  fiambres:    { label: '🥩 Fiambres'    },
+  lacteos:     { label: '🥛 Lácteos'     },
+  conservas:   { label: '🥫 Conservas'   },
+  aderezos:    { label: '🧴 Aderezos'    },
+  especias:    { label: '🌿 Especias'    },
+  bebidas:     { label: '🥤 Bebidas'     },
+  pasteleria:  { label: '🧁 Pastelería y Repostería' },
+  otros:       { label: '🛒 Otros'       },
 };
 
 /*
