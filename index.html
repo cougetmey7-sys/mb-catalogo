@@ -124,13 +124,23 @@
 <section class="section-ofertas-destacadas" id="ofertasDestacadasSection" style="display:none">
   <div class="ofertas-dest-header fade-up">
     <h2 class="ofertas-dest-title">🔥 Ofertas de la semana</h2>
-    <p class="ofertas-dest-sub">Precios especiales por tiempo limitado</p>
+    <p class="ofertas-dest-sub">Consultanos por WhatsApp — Disponibilidad por tiempo limitado</p>
     <div class="ofertas-dest-stock">⏳ Hasta agotar stock</div>
   </div>
   <div class="ofertas-dest-carousel-wrap">
     <button class="ofertas-dest-arrow ofertas-dest-arrow-prev" id="ofertasDestPrev" type="button" aria-label="Ver ofertas anteriores">‹</button>
     <div class="ofertas-dest-grid" id="ofertasDestacadasGrid"></div>
     <button class="ofertas-dest-arrow ofertas-dest-arrow-next" id="ofertasDestNext" type="button" aria-label="Ver más ofertas">›</button>
+
+    <!-- Overlay "hay más ofertas": degradado + flecha grande + texto,
+         se oculta solo apenas el usuario desliza o llega al final. -->
+    <div class="ofertas-swipe-overlay" id="ofertasSwipeOverlay" aria-hidden="true">
+      <div class="ofertas-swipe-gradient"></div>
+      <button class="ofertas-swipe-arrow" id="ofertasSwipeArrow" type="button" aria-label="Ver más ofertas">
+        <span class="ofertas-swipe-arrow-glyph">→</span>
+      </button>
+      <span class="ofertas-swipe-label">Deslizá<br>para ver más</span>
+    </div>
   </div>
 </section>
 

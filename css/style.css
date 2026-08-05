@@ -1650,18 +1650,8 @@ footer {
 .pcard-dot.is-active { background: rgba(20,20,20,.85); }
 
 /* ─────────────────────────────────────────────
-   TARJETA DE OFERTA (con precio destacado)
+   TARJETA DE OFERTA (destacada, sin precio)
 ───────────────────────────────────────────── */
-.pcard-precio {
-  font-family: var(--ff-display);
-  font-size: 28px;
-  font-weight: 700;
-  color: #ff8c1a;
-  letter-spacing: .3px;
-  margin-top: 2px;
-  line-height: 1.15;
-  text-shadow: 0 0 18px rgba(255,140,0,.25);
-}
 .pcard-oferta { border-color: #ff6b00; }
 .pcard-oferta .pcard-btn-add { background: #ff6b00; }
 .pcard-oferta .pcard-btn-add:hover:not(.added) { background: #e05f00; }
@@ -1787,6 +1777,7 @@ footer {
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scroll-padding: 0;
@@ -1827,32 +1818,10 @@ footer {
 }
 .ofertas-dest-arrow:hover { background: rgba(255,107,0,.35); }
 .ofertas-dest-arrow-prev { left: 6px; }
-.ofertas-dest-arrow-next { right: 6px; }
-
-.pcard-ribbon-oferta {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  background: #ff6b00;
-  color: #fff;
-  font-family: var(--ff-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 4px 10px;
-  border-radius: 3px;
-}
-
-/* Etiqueta chica sobre el precio ("🔥 Precio Oferta") */
-.pcard-precio-tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  color: #ff9a4d;
-  margin-top: 8px;
-}
+/* La flecha "siguiente" chica queda oculta: la reemplaza la flecha grande
+   animada del overlay (mismo click, mismo aria-label, mucho más visible).
+   Evita duplicar el mismo control dos veces en el mismo lugar. */
+.ofertas-dest-arrow-next { display: none; }
 
 @media (max-width: 992px) {
   .ofertas-dest-carousel-wrap { padding: 0 44px; }
@@ -1937,4 +1906,96 @@ footer {
 
 @media (max-width: 480px) {
   .hero-location { max-width: 100%; }
+}
+
+/* ─────────────────────────────────────────────
+   OVERLAY "HAY MÁS OFERTAS" — borde derecho del carrusel
+   Degradado + flecha grande animada + texto corto.
+   Reutiliza los colores/tipografía ya definidos en :root.
+───────────────────────────────────────────── */
+.ofertas-swipe-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 6px; /* iguala el padding-bottom del track para no tapar la scrollbar oculta */
+  right: -1px;
+  width: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 4;
+  pointer-events: none; /* el degradado nunca bloquea clics sobre las tarjetas */
+  opacity: 1;
+  transition: opacity .35s ease;
+}
+.ofertas-swipe-overlay.is-hidden { opacity: 0; pointer-events: none; }
+
+.ofertas-swipe-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, #140a04 65%);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.ofertas-swipe-arrow {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ff6b00;
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto; /* el botón sí se puede tocar/clickear */
+  box-shadow: 0 6px 22px rgba(255,107,0,.5);
+  animation: ofertasArrowPulse 1.8s ease-in-out infinite;
+}
+.ofertas-swipe-arrow:hover { background: #e05f00; }
+.ofertas-swipe-arrow-glyph {
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 700;
+  transform: translateX(0);
+  animation: ofertasArrowNudge 1.8s ease-in-out infinite;
+}
+
+.ofertas-swipe-label {
+  position: relative;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  color: #ffcda3;
+  text-shadow: 0 1px 4px rgba(0,0,0,.6);
+}
+
+@keyframes ofertasArrowPulse {
+  0%, 100% { box-shadow: 0 6px 22px rgba(255,107,0,.5); transform: scale(1); }
+  50%      { box-shadow: 0 6px 30px rgba(255,107,0,.75); transform: scale(1.06); }
+}
+@keyframes ofertasArrowNudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ofertas-swipe-arrow, .ofertas-swipe-arrow-glyph { animation: none; }
+}
+
+@media (max-width: 768px) {
+  /* Sin botones de flecha en mobile (se navega con el dedo), pero el
+     degradado + flecha grande siguen sugiriendo que se puede deslizar. */
+  .ofertas-swipe-overlay { width: 92px; }
+  .ofertas-swipe-arrow { width: 46px; height: 46px; }
+  .ofertas-swipe-arrow-glyph { font-size: 20px; }
+  .ofertas-swipe-label { font-size: 10.5px; }
+}
+
+@media (max-width: 480px) {
+  .ofertas-swipe-overlay { width: 78px; gap: 6px; }
+  .ofertas-swipe-arrow { width: 42px; height: 42px; }
 }

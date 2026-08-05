@@ -165,7 +165,7 @@ function filtrarProductos() {
 ───────────────────────────────────────────── */
 function renderOfertasDestacadas() {
   if (!DOM.ofertasDestGrid || !DOM.ofertasDestSection) return;
-  const destacadas = productos.filter(p => p.oferta && p.precioOferta);
+  const destacadas = productos.filter(p => p.oferta);
   const btnVerOfertas = document.getElementById('verOfertasBtn');
 
   if (!destacadas.length) {
@@ -194,7 +194,9 @@ function renderOfertasDestacadas() {
 
 function initOfertasDestacadasCarrusel() {
   const prev = document.getElementById('ofertasDestPrev');
-  const next = document.getElementById('ofertasDestNext');
+  const next = document.getElementById('ofertasDestNext'); // oculto por CSS, pero se mantiene funcional
+  const overlayArrow = document.getElementById('ofertasSwipeArrow');
+
   const scrollPor = dir => {
     if (!DOM.ofertasDestGrid) return;
     const tarjeta = DOM.ofertasDestGrid.querySelector('.pcard');
@@ -203,6 +205,47 @@ function initOfertasDestacadasCarrusel() {
   };
   prev?.addEventListener('click', () => scrollPor(-1));
   next?.addEventListener('click', () => scrollPor(1));
+  overlayArrow?.addEventListener('click', () => scrollPor(1)); // misma acción que "siguiente"
+
+  // En computadora: la rueda del mouse (sin Shift) también desplaza el
+  // carrusel horizontalmente, para que quede claro que hay más contenido.
+  DOM.ofertasDestGrid?.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // ya es horizontal (trackpad/Shift)
+    DOM.ofertasDestGrid.scrollLeft += e.deltaY;
+    e.preventDefault();
+  }, { passive: false });
+}
+
+/* ─────────────────────────────────────────────
+   OVERLAY "HAY MÁS OFERTAS" — se oculta solo al
+   deslizar o al llegar al final del carrusel
+───────────────────────────────────────────── */
+function initOfertasSwipeHint() {
+  const overlay = document.getElementById('ofertasSwipeOverlay');
+  const grid = DOM.ofertasDestGrid;
+  if (!overlay || !grid) return;
+
+  const ocultarOverlay = () => overlay.classList.add('is-hidden');
+
+  const evaluarSiHaceFalta = () => {
+    // Si todo el contenido ya entra sin necesidad de deslizar, ni se muestra.
+    if (grid.scrollWidth <= grid.clientWidth + 4) ocultarOverlay();
+  };
+
+  // Se oculta apenas el usuario empieza a deslizar, o si llega al final.
+  let yaOculto = false;
+  grid.addEventListener('scroll', () => {
+    if (yaOculto) return;
+    const alFinal = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 4;
+    if (grid.scrollLeft > 12 || alFinal) {
+      ocultarOverlay();
+      yaOculto = true;
+    }
+  }, { passive: true });
+
+  // Evaluar una vez que las tarjetas ya se dibujaron (con su ancho real).
+  requestAnimationFrame(() => requestAnimationFrame(evaluarSiHaceFalta));
+  window.addEventListener('resize', evaluarSiHaceFalta);
 }
 
 /* ─────────────────────────────────────────────
@@ -324,15 +367,11 @@ function crearTarjeta(p, opciones = {}) {
     imgHtml = `<div class="pcard-img-placeholder"><span>Imagen<br>próximamente</span></div>`;
   }
 
-  // El precio SOLO se muestra en la sección de Ofertas Destacadas,
-  // nunca en la grilla normal del catálogo (aunque el producto tenga oferta=true).
-  const esOfertaConPrecio = destacado && p.oferta && p.precioOferta;
-  const ribbonOferta = esOfertaConPrecio ? `<div class="pcard-ribbon-oferta">OFERTA</div>` : '';
-  const precioHtml = esOfertaConPrecio
-    ? `<div class="pcard-precio-tag">🔥 Precio Oferta</div>
-       <div class="pcard-precio">${/^[\d.,]+$/.test(p.precioOferta) ? '$' + p.precioOferta : p.precioOferta}</div>`
-    : '';
-  const textoBoton = enCarrito ? '✓ Agregado' : (esOfertaConPrecio ? '🛒 Agregar al pedido' : '+ Agregar');
+  // Tarjeta de la sección "🔥 Ofertas Destacadas": ya NO muestra precio, descuento
+  // ni importe (por pedido del cliente) — el objetivo es que consulte por WhatsApp.
+  // Mantiene marca, presentación y ambos botones (Agregar / Consultar).
+  const esDestacado = destacado && p.oferta;
+  const textoBoton = enCarrito ? '✓ Agregado' : (esDestacado ? '🛒 Agregar al pedido' : '+ Agregar');
   const descripcionHtml = p.descripcion ? `<div class="pcard-desc">${p.descripcion}</div>` : '';
   const apedidoHtml = p.aPedido ? `<div class="pcard-badge-apedido">📦 Producto disponible por pedido</div>` : '';
   const consultarPrecioHtml = p.consultarPrecio ? `<div class="pcard-consultar-precio">💬 Consultar precio</div>` : '';
@@ -342,13 +381,12 @@ function crearTarjeta(p, opciones = {}) {
       </select>` : '';
 
   const div = document.createElement('div');
-  div.className  = 'pcard fade-up' + (esOfertaConPrecio ? ' pcard-oferta' : '');
+  div.className  = 'pcard fade-up' + (esDestacado ? ' pcard-oferta' : '');
   div.id         = `${idPrefix}pcard_${p.id}`;
   div.dataset.id = p.id;
 
   div.innerHTML = `
     <div class="pcard-img-wrap">
-      ${ribbonOferta}
       ${imgHtml}
     </div>
     <div class="pcard-body">
@@ -358,7 +396,6 @@ function crearTarjeta(p, opciones = {}) {
       <div class="pcard-peso">${p.peso}</div>
       ${descripcionHtml}
       ${consultarPrecioHtml}
-      ${precioHtml}
       ${variantesHtml}
     </div>
     <div class="pcard-footer">
@@ -871,5 +908,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   construirIndice();
   actualizarBadgeCarrito();
   renderOfertasDestacadas();
+  initOfertasSwipeHint();
   renderCatalogo();
 });
